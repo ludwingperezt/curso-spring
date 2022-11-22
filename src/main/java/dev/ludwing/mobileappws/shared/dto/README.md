@@ -1,0 +1,1 @@
+En este paquete están las clases compartidas que servirán de acceso a la base de datos (Data Transfer Objects -dto-).
