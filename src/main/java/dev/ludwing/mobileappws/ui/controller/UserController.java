@@ -1,5 +1,7 @@
 package dev.ludwing.mobileappws.ui.controller;
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.ludwing.mobileappws.service.UserService;
+import dev.ludwing.mobileappws.shared.dto.UserDto;
 import dev.ludwing.mobileappws.ui.model.request.UserDetailRequestModel;
 import dev.ludwing.mobileappws.ui.model.response.UserRest;
 
@@ -18,15 +22,38 @@ import dev.ludwing.mobileappws.ui.model.response.UserRest;
 @RestController
 @RequestMapping("users") // GET|POST|PUT|DELETE http://localhost/users
 public class UserController {
+	
+	// La anotación @Autowired es para indicar la inyección de dependencias, en este caso
+	// el del servicio de acceso a datos de Usuarios.
+	@Autowired
+	UserService userService;
 
 	@GetMapping  // Mapea la función al método GET 
 	public String getUser() {
 		return "get user was called";
 	}
 	
+	/**
+	 * Método para la inserción de usuarios con método HTTP POST.
+	 * @param userDetails
+	 * @return
+	 */
 	@PostMapping
 	public UserRest createUser(@RequestBody UserDetailRequestModel userDetails) {
-		return null;
+		UserRest returnValue = new UserRest();
+		
+		UserDto userDto = new UserDto();
+		
+		// BeanUtils.copyProperties() se usa para llenar los datos del objeto DTO con 
+		// los datos del objeto que se recibió como body del Request.
+		BeanUtils.copyProperties(userDetails, userDto);
+		
+		UserDto createdUser = userService.createUser(userDto);
+
+		// Se copian los datos del usuario recién creado al objeto de respuesta.
+		BeanUtils.copyProperties(createdUser, returnValue);
+		
+		return returnValue;
 	}
 	
 	@PutMapping
