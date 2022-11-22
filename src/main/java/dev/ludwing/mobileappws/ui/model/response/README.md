@@ -1,0 +1,1 @@
+En este paquete van las clases que se mapean a respuestas enviadas por los controladores.

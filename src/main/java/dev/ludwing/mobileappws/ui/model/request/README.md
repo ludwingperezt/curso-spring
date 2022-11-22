@@ -1,0 +1,1 @@
+En este paquete están todas las clases necesarias para convertir payloads JSON que vienen en requests en objetos JAVA
