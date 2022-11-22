@@ -1,29 +1,55 @@
-package dev.ludwing.mobileappws.shared.dto;
+package dev.ludwing.mobileappws.io.entity;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 /**
- * Clase de acceso a datos de usuarios.
+ * Esta clase define la tabla que se usará en la base de datos y sus campos.
  * 
- * Esta es una clase "shared" que puede ser utilizada en diferentes niveles.
+ * El nombre de la tabla será "users".
  * 
  * @author ludwingp
  *
  */
-public class UserDto implements Serializable {
+@Entity(name = "users")
+public class UserEntity implements Serializable {
 
-	private static final long serialVersionUID = 4199068174802962813L;
+	private static final long serialVersionUID = -8769262141680012810L;
+
+	// id es un campo numérico autogenerado
+	@Id
+	@GeneratedValue
 	private long id;
+
+	@Column(nullable = false)
 	private String userId;
+
+	// Los campos firstName, lastName y email definen un tamaño máximo para
+	// que no usen el máximo de caracteres posibles (255).
+	@Column(nullable = false, length = 50)
 	private String firstName;
+
+	@Column(nullable = false, length = 50)
 	private String lastName;
+
+	@Column(nullable = false, length = 120)
 	private String email;
-	private String password;
+
+	// el campo encryptedPassword no tiene límite de caracteres porque eso
+	// depende del algorítmo de cifrado.
+	@Column(nullable = false)
 	private String encryptedPassword;
+
+	// emailVerificationToken no será obligatorio
 	private String emailVerificationToken;
-	
-	// el campo emailVerificationStatus se pone a false para que al crear
-	// el objeto en la base de datos, el valor que tenga por defecto sea false.
+
+	// Para que el valor por defecto al crear el registro en la base de datos
+	// sea false, la propiedad se iguala a false.
+	@Column(nullable = false)
 	private Boolean emailVerificationStatus = false;
 
 	public long getId() {
@@ -64,14 +90,6 @@ public class UserDto implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public String getEncryptedPassword() {
