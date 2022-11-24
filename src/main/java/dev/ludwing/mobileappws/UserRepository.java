@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import dev.ludwing.mobileappws.io.entity.UserEntity;
 
 /**
- * Sin no se utiliza Spring Data JPA, entonces sería necesario crear
+ * Si no se utiliza Spring Data JPA, entonces sería necesario crear
  * una clase Data Access Object manualmente para realizar operaciones CRUD
  * siendo necesario gestionar manualmente las conexiones a base de datos
  * y el SQL a ejecutar.

@@ -1,1 +1,1 @@
-En este paquete están las clases compartidas que servirán de acceso a la base de datos (Data Transfer Objects -dto-).
+En este paquete están las clases compartidas que servirán para comunicar datos de usuarios entre diferentes capas (Data Transfer Objects -dto-).
