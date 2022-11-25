@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import dev.ludwing.mobileappws.UserRepository;
 import dev.ludwing.mobileappws.io.entity.UserEntity;
 import dev.ludwing.mobileappws.service.UserService;
+import dev.ludwing.mobileappws.shared.Utils;
 import dev.ludwing.mobileappws.shared.dto.UserDto;
 
 /**
@@ -25,6 +26,9 @@ public class UserServiceImpl implements UserService {
 	// Inyección de la clase de repositorio de usuarios.
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	Utils utils;
 
 	/**
 	 * Función de servicio que ejecuta la inserción de un registro en la base de datos.
@@ -40,10 +44,12 @@ public class UserServiceImpl implements UserService {
 		UserEntity userEntity = new UserEntity();
 		BeanUtils.copyProperties(user, userEntity);
 		
+		String publicUserId = utils.generateUserId(30);
+		
 		// POr el momento, para algunos datos obligatorios se establecen
 		// hardcoded values para que no falle la operación
 		userEntity.setEncryptedPassword("una_password");
-		userEntity.setUserId("test_user_ID");
+		userEntity.setUserId(publicUserId);
 		
 		UserEntity storedUserDetails = userRepository.save(userEntity);
 		
