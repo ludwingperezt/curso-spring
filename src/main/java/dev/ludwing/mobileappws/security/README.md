@@ -1,0 +1,1 @@
+En este paquete van todas las clases relacionadas con la seguridad de la aplicación.

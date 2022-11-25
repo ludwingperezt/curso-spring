@@ -72,7 +72,7 @@ public class WebSecurity {
 		// Luego se configura que todas las peticiones POST a /users no requieran autenticación
 		// Por último, todas las demás peticiones Sí deben ir autenticadas.
 		http.csrf().disable()
-			.authorizeHttpRequests().antMatchers(HttpMethod.POST, "/users").permitAll()
+			.authorizeHttpRequests().antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
 			.anyRequest().authenticated();
 		
 		return http.build();

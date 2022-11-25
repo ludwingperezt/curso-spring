@@ -1,7 +1,10 @@
 package dev.ludwing.mobileappws.service.impl;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -64,10 +67,20 @@ public class UserServiceImpl implements UserService {
 		return returnValue;
 	}
 
+	/**
+	 * Este método es utilizado por Spring para cargar los datos del usuario en base a su identificador
+	 * (para hacer login) en este caso, el email. 
+	 * 
+	 * Este método se usa al hacer login.
+	 * 
+	 */
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		UserEntity userEntity = userRepository.findUserByEmail(email);
+		
+		if (userEntity == null) throw new UsernameNotFoundException(email);
+		
+		return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
 	}
 
 }
