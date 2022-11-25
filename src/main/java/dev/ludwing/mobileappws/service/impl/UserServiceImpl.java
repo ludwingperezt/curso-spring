@@ -2,6 +2,7 @@ package dev.ludwing.mobileappws.service.impl;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import dev.ludwing.mobileappws.UserRepository;
@@ -29,6 +30,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	Utils utils;
+	
+	@Autowired
+	BCryptPasswordEncoder encoder;
 
 	/**
 	 * Función de servicio que ejecuta la inserción de un registro en la base de datos.
@@ -46,10 +50,8 @@ public class UserServiceImpl implements UserService {
 		
 		String publicUserId = utils.generateUserId(30);
 		
-		// POr el momento, para algunos datos obligatorios se establecen
-		// hardcoded values para que no falle la operación
-		userEntity.setEncryptedPassword("una_password");
-		userEntity.setUserId(publicUserId);
+		userEntity.setEncryptedPassword(encoder.encode(user.getPassword()));  // Encriptación de la contraseña
+		userEntity.setUserId(publicUserId); // Generar el ID único alfanumérico del usuario.
 		
 		UserEntity storedUserDetails = userRepository.save(userEntity);
 		
