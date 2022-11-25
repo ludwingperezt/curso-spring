@@ -36,7 +36,7 @@ public class UserEntity implements Serializable {
 	@Column(nullable = false, length = 50)
 	private String lastName;
 
-	@Column(nullable = false, length = 120, unique = true)
+	@Column(nullable = false, length = 120)
 	private String email;
 
 	// el campo encryptedPassword no tiene límite de caracteres porque eso

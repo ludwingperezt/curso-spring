@@ -25,5 +25,11 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
 
 	// El método findUserByEmail() es un ejemplo de método personalizado para buscar un 
 	// usuario con base al email.
-	// UserEntity findUserByEmail(String email);
+	//
+	// Spring provee una forma muy simple de realizar querys sobre campos específicos.
+	// Para lograrlo se usa la siguiente formula: se debe definir un método de búsqueda
+	// y éste siempre debe iniciar con la palabra "find" luego se coloca "By" para indicar
+	// que se utilizará algún campo y por último se coloca el nombre del campo a buscar, el
+	// cual debe estar definido en UserEntity.
+	UserEntity findUserByEmail(String email);
 }
