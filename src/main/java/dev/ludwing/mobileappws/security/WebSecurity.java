@@ -69,13 +69,19 @@ public class WebSecurity {
 		AuthenticationManager authManager = builder.build();
 		http.authenticationManager(authManager);
 		
+		// Configuración del AuthenticationFilter para que use una URI diferente a la que provee
+		// Spring framework por defecto para hacer login, la cual es /login
+		// Con esta configuración el URI a utilizar es /users/login
+		final AuthenticationFilter filter = new AuthenticationFilter(authManager);
+		filter.setFilterProcessesUrl("/users/login");
+		
 		// CSRF se desactiva porque no se utiliza en stateless API's
 		// Luego se configura que todas las peticiones POST a /users no requieran autenticación Y requieren
 		// que se use el filtro de autenticación declarado en la clase AuthenticationFilter.
 		// Por último, todas las demás peticiones Sí deben ir autenticadas.
 		http.csrf().disable()
 			.authorizeHttpRequests().antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
-			.anyRequest().authenticated().and().addFilter(new AuthenticationFilter(authManager));
+			.anyRequest().authenticated().and().addFilter(filter);
 		
 		return http.build();
 	}
