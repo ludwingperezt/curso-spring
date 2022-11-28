@@ -10,8 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import dev.ludwing.mobileappws.UserRepository;
 import dev.ludwing.mobileappws.io.entity.UserEntity;
+import dev.ludwing.mobileappws.io.repositories.UserRepository;
 import dev.ludwing.mobileappws.service.UserService;
 import dev.ludwing.mobileappws.shared.Utils;
 import dev.ludwing.mobileappws.shared.dto.UserDto;
@@ -81,6 +81,21 @@ public class UserServiceImpl implements UserService {
 		if (userEntity == null) throw new UsernameNotFoundException(email);
 		
 		return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
+	}
+	
+	/***
+	 * Obtiene un usuario de la base de datos en base a su Email pero retorna como
+	 * respuesta un objeto de tipo UserDto.
+	 */
+	@Override
+	public UserDto getUser(String email) {
+		UserEntity userEntity = userRepository.findUserByEmail(email);
+		
+		if (userEntity == null) throw new UsernameNotFoundException(email);
+
+		UserDto returnValue = new UserDto();
+		BeanUtils.copyProperties(userEntity, returnValue);
+		return returnValue;
 	}
 
 }

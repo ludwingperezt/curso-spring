@@ -21,6 +21,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import dev.ludwing.mobileappws.SpringApplicationContext;
+import dev.ludwing.mobileappws.service.UserService;
+import dev.ludwing.mobileappws.shared.dto.UserDto;
 import dev.ludwing.mobileappws.ui.model.request.UserLoginRequestModel;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -106,8 +109,24 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 		res.addHeader("userid", userdetails.getUserid());
 		 */
 		
+		/**
+		 * Debido a que AuthenticationFilter no es un @Bean que es inyectado de forma automática, sino
+		 * que es creado manualmente, para poder acceder a la base de datos y obtener el ID del usuario,
+		 * es necesario tener acceso al servicio que accede a DB el cual sí es un @Bean.  Para ello es
+		 * necesario crear una clase general que proveea acceso desde cualquier punto de la aplicación 
+		 * a los beans inyectados.  Esa clase se crea en el paquete general, en este caso se le ha dado
+		 * el nombre SpringApplicationContext.
+		 * 
+		 * Cuando un bean es creado por Spring Framework, el nombre del bean es el nombre de la clase pero 
+		 * comenzando con una inicial minúscula.
+		 */
+		UserService userService = (UserService)SpringApplicationContext.getBean("userServiceImpl");
+		UserDto userDto = userService.getUser(username);
+		
+		
 		// Una vez generado el token, éste se envía en los headers de la respuesta y el cliente debe
 		// almacenarlo para usarlo posteriormente.
 		res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
+		res.addHeader("UserID", userDto.getUserId());
 	}
 }

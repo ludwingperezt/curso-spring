@@ -1,4 +1,4 @@
-package dev.ludwing.mobileappws;
+package dev.ludwing.mobileappws.io.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

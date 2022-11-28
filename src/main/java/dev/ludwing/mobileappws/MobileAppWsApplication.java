@@ -23,5 +23,14 @@ public class MobileAppWsApplication {
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+	
+	/**
+	 * Aquí se declara la creación del application context que sirve para obtener otros beans.
+	 * @return
+	 */
+	@Bean
+	public SpringApplicationContext springApplicationContext() {
+		return new SpringApplicationContext();
+	}
 
 }
