@@ -63,7 +63,7 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 			// https://developer.okta.com/blog/2018/10/31/jwts-with-java
 			SignatureAlgorithm mAlgorithm = SignatureAlgorithm.HS512;
 			
-			byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SecurityConstants.TOKEN_SECRET);
+			byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SecurityConstants.getTokenSecret());
 			Key mKey = new SecretKeySpec(apiKeySecretBytes, mAlgorithm.getJcaName());
 			
 			// FIN SNIPPET.
