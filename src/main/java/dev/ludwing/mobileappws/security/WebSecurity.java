@@ -2,6 +2,7 @@ package dev.ludwing.mobileappws.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -65,15 +66,16 @@ public class WebSecurity {
 		builder.userDetailsService(userDetailService).passwordEncoder(encoder);
 		
 		// El AuthenticationManager es un objeto que se puede usar en las filter classes. 
-		// AuthenticationManager authManager = builder.build();
-		// http.authenticationManager(authManager);
+		AuthenticationManager authManager = builder.build();
+		http.authenticationManager(authManager);
 		
 		// CSRF se desactiva porque no se utiliza en stateless API's
-		// Luego se configura que todas las peticiones POST a /users no requieran autenticación
+		// Luego se configura que todas las peticiones POST a /users no requieran autenticación Y requieren
+		// que se use el filtro de autenticación declarado en la clase AuthenticationFilter.
 		// Por último, todas las demás peticiones Sí deben ir autenticadas.
 		http.csrf().disable()
 			.authorizeHttpRequests().antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
-			.anyRequest().authenticated();
+			.anyRequest().authenticated().and().addFilter(new AuthenticationFilter(authManager));
 		
 		return http.build();
 	}
