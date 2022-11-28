@@ -75,13 +75,17 @@ public class WebSecurity {
 		final AuthenticationFilter filter = new AuthenticationFilter(authManager);
 		filter.setFilterProcessesUrl("/users/login");
 		
+		// Creación del filtro de autorización, el cual parsea el token JWT y obtiene el nombre
+		// de usuario al que le pertenece.
+		final AuthorizationFilter filterAuthorization = new AuthorizationFilter(authManager);
+		
 		// CSRF se desactiva porque no se utiliza en stateless API's
 		// Luego se configura que todas las peticiones POST a /users no requieran autenticación Y requieren
 		// que se use el filtro de autenticación declarado en la clase AuthenticationFilter.
 		// Por último, todas las demás peticiones Sí deben ir autenticadas.
 		http.csrf().disable()
 			.authorizeHttpRequests().antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
-			.anyRequest().authenticated().and().addFilter(filter);
+			.anyRequest().authenticated().and().addFilter(filter).addFilter(filterAuthorization);
 		
 		return http.build();
 	}
