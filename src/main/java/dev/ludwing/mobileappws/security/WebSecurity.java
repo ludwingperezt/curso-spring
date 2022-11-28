@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -82,10 +83,14 @@ public class WebSecurity {
 		// CSRF se desactiva porque no se utiliza en stateless API's
 		// Luego se configura que todas las peticiones POST a /users no requieran autenticación Y requieren
 		// que se use el filtro de autenticación declarado en la clase AuthenticationFilter.
-		// Por último, todas las demás peticiones Sí deben ir autenticadas.
+		// Todas las demás peticiones Sí deben ir autenticadas
+		// Se agregan los filtros de autenticación y autorización
+		// Se configura el framework para que la API sea stateless.
 		http.csrf().disable()
 			.authorizeHttpRequests().antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
-			.anyRequest().authenticated().and().addFilter(filter).addFilter(filterAuthorization);
+			.anyRequest().authenticated()
+			.and().addFilter(filter).addFilter(filterAuthorization)
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		
 		return http.build();
 	}
