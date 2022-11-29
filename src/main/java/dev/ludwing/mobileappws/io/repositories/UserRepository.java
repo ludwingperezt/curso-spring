@@ -1,6 +1,7 @@
 package dev.ludwing.mobileappws.io.repositories;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import dev.ludwing.mobileappws.io.entity.UserEntity;
@@ -17,11 +18,13 @@ import dev.ludwing.mobileappws.io.entity.UserEntity;
  * No es necesario definir los métodos CRUD, pero pueden agregarse métodos personalizados,
  * por ejemplo para búsquedas sobre campos específicos, etc.
  * 
+ * PagingAndSortingRepository es necesaria para la implementación de la paginación.
+ * 
  * @author ludwingp
  *
  */
 @Repository
-public interface UserRepository extends CrudRepository<UserEntity, Long> {
+public interface UserRepository extends PagingAndSortingRepository<UserEntity, Long> {
 
 	// El método findUserByEmail() es un ejemplo de método personalizado para buscar un 
 	// usuario con base al email.

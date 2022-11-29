@@ -1,5 +1,7 @@
 package dev.ludwing.mobileappws.service;
 
+import java.util.List;
+
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import dev.ludwing.mobileappws.shared.dto.UserDto;
@@ -21,4 +23,5 @@ public interface UserService  extends UserDetailsService{
 	UserDto getUserByUserId(String userId);
 	UserDto updateUser(String userid, UserDto user);
 	void deleteUser(String userid);
+	List<UserDto> getUsers(int page, int limit);
 }

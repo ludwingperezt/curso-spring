@@ -1,14 +1,19 @@
 package dev.ludwing.mobileappws.service.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import dev.ludwing.mobileappws.exceptions.UserServiceException;
 import dev.ludwing.mobileappws.io.entity.UserEntity;
@@ -140,6 +145,7 @@ public class UserServiceImpl implements UserService {
 	/**
 	 * Función que implementa la funcionalidad de eliminación de un registro.
 	 */
+	@Transactional
 	@Override
 	public void deleteUser(String userid) {
 
@@ -149,6 +155,33 @@ public class UserServiceImpl implements UserService {
 		
 		userRepository.delete(userEntity);
 		
+	}
+
+	/**
+	 * Servicio que obtiene la lista de usuarios en la db pero con paginación.
+	 */
+	@Override
+	public List<UserDto> getUsers(int page, int limit) {
+		List<UserDto> returnValue = new ArrayList<>();
+		
+		// Esta es la configuración de la paginación al solicitar los registros.
+		Pageable pageable = PageRequest.of(page, limit);
+		
+		// Esta es la página de registros que retorna la consulta.
+		Page<UserEntity> userPages = userRepository.findAll(pageable);
+		
+		// De la página de registros se obtiene la lista de registros como tal.
+		List<UserEntity> users = userPages.getContent();
+		
+		// La lista de registros obtenida se convierte a una lista de objetos tipo UserDto
+		// que es devuelta a la función que invocó la consulta.
+		for (UserEntity userEntity: users) {
+			UserDto userDto = new UserDto();
+			BeanUtils.copyProperties(userEntity, userDto);
+			returnValue.add(userDto);
+		}
+		
+		return returnValue;
 	}
 
 }

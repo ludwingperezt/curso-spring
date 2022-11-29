@@ -1,5 +1,8 @@
 package dev.ludwing.mobileappws.ui.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.ludwing.mobileappws.exceptions.UserServiceException;
@@ -124,5 +128,30 @@ public class UserController {
 		returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
 		
 		return returnValue;
+	}
+	
+	/**
+	 * Endpoint para listar a los usuarios en la base de datos.
+	 * 
+	 * @param page: Es un query param que indica qué número de página se está leyendo y su valor por defecto es 1 (la primera página)
+	 * @param limit: Es un query param que indica qué cantidad de registros por página se solicita. Por defecto son 25.
+	 * @return
+	 */
+	@GetMapping(produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+	public List<UserRest> getUsers(@RequestParam(value="page", defaultValue="0") int page,
+									@RequestParam(value="limit", defaultValue="25") int limit) {
+		List<UserRest> listUsers = new ArrayList<>();
+		
+		List<UserDto> usersDtos = userService.getUsers(page, limit);
+		
+		// Recorrer la lista de usuarios que devuelve la consulta y convertirlos
+		// al tipo de objeto que se retorna al cliente.
+		for (UserDto userDto: usersDtos) {
+			UserRest userModel = new UserRest();
+			BeanUtils.copyProperties(userDto, userModel);
+			listUsers.add(userModel);
+		}
+		
+		return listUsers;
 	}
 }
