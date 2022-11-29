@@ -2,6 +2,7 @@ package dev.ludwing.mobileappws.ui.controller;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +30,17 @@ public class UserController {
 	@Autowired
 	UserService userService;
 
-	@GetMapping(path="/{userid}")  // Mapea la función al método GET 
+	/**
+	 * El parámetro "produces" indica qué tipo de respuesta se enviará al cliente.  Si solo se coloca un valor
+	 * (sin brackets) entonces el endpoint solo devolverá ese tipo de representación y si el cliente solicita otro
+	 * entonces lanzará una excepción.  Si hay dos o más representaciones entonces se devolverá la que
+	 * solicite el cliente, pero si el cliente no envía ninguno (en la cabecera Accept) entonces por
+	 * defecto se retorna en el formato que esté primero, en este caso sería XML.
+	 * 
+	 * @param userid
+	 * @return
+	 */
+	@GetMapping(path="/{userid}", produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})  // Mapea la función al método GET 
 	public UserRest getUser(@PathVariable String userid) {
 		UserRest returnValue = new UserRest();
 		
@@ -41,10 +52,15 @@ public class UserController {
 	
 	/**
 	 * Método para la inserción de usuarios con método HTTP POST.
+	 * 
+	 * Con el parámetro "consumes" se indica qué representaciones se podrán recibir del cliente.
+	 * En este caso se aceptan XML y JSON.
+	 * 
 	 * @param userDetails
 	 * @return
 	 */
-	@PostMapping
+	@PostMapping(consumes= {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}, 
+					produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
 	public UserRest createUser(@RequestBody UserDetailRequestModel userDetails) {
 		UserRest returnValue = new UserRest();
 		
