@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.ludwing.mobileappws.exceptions.UserServiceException;
 import dev.ludwing.mobileappws.service.UserService;
 import dev.ludwing.mobileappws.shared.dto.UserDto;
 import dev.ludwing.mobileappws.ui.model.request.UserDetailRequestModel;
+import dev.ludwing.mobileappws.ui.model.response.ErrorMessages;
 import dev.ludwing.mobileappws.ui.model.response.UserRest;
 
 // La anotación @RestController identifica la clase como un controlador REST para que pueda
@@ -61,8 +63,10 @@ public class UserController {
 	 */
 	@PostMapping(consumes= {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}, 
 					produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-	public UserRest createUser(@RequestBody UserDetailRequestModel userDetails) {
+	public UserRest createUser(@RequestBody UserDetailRequestModel userDetails) throws Exception {
 		UserRest returnValue = new UserRest();
+		
+		if (userDetails.getFirstName().isEmpty()) throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
 		
 		UserDto userDto = new UserDto();
 		
