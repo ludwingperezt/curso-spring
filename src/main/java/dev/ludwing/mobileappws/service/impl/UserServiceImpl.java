@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService {
 		
 		UserEntity userEntity = userRepository.findUserByUserId(userId);
 		
-		if (userEntity == null) throw new UsernameNotFoundException(userId);
+		if (userEntity == null) throw new UserServiceException("User with ID: " + userId + " not found.");
 		
 		BeanUtils.copyProperties(userEntity, userDto);		
 		
@@ -135,6 +135,20 @@ public class UserServiceImpl implements UserService {
 		BeanUtils.copyProperties(updatedUser, userDtoResponse);
 		
 		return userDtoResponse;
+	}
+	
+	/**
+	 * Función que implementa la funcionalidad de eliminación de un registro.
+	 */
+	@Override
+	public void deleteUser(String userid) {
+
+		UserEntity userEntity = userRepository.findUserByUserId(userid);
+		
+		if (userEntity == null) throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+		
+		userRepository.delete(userEntity);
+		
 	}
 
 }

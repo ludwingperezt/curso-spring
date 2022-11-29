@@ -17,6 +17,9 @@ import dev.ludwing.mobileappws.service.UserService;
 import dev.ludwing.mobileappws.shared.dto.UserDto;
 import dev.ludwing.mobileappws.ui.model.request.UserDetailRequestModel;
 import dev.ludwing.mobileappws.ui.model.response.ErrorMessages;
+import dev.ludwing.mobileappws.ui.model.response.OperationStatusModel;
+import dev.ludwing.mobileappws.ui.model.response.RequestOperationName;
+import dev.ludwing.mobileappws.ui.model.response.RequestOperationStatus;
 import dev.ludwing.mobileappws.ui.model.response.UserRest;
 
 // La anotación @RestController identifica la clase como un controlador REST para que pueda
@@ -104,8 +107,22 @@ public class UserController {
 		return returnValue;
 	}
 	
-	@DeleteMapping
-	public String deleteUser() {
-		return "user deleted";
+	/**
+	 * Método de endpoint para eliminar un registro de usuario.
+	 * @param userid
+	 * @return
+	 */
+	@DeleteMapping(path="/{userid}", produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+	public OperationStatusModel deleteUser(@PathVariable String userid) {
+		
+		OperationStatusModel returnValue = new OperationStatusModel();
+		
+		returnValue.setOperationName(RequestOperationName.DELETE.name());
+		
+		userService.deleteUser(userid);
+		
+		returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+		
+		return returnValue;
 	}
 }
