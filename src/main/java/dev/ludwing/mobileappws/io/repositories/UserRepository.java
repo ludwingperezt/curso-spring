@@ -32,4 +32,7 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
 	// que se utilizará algún campo y por último se coloca el nombre del campo a buscar, el
 	// cual debe estar definido en UserEntity.
 	UserEntity findUserByEmail(String email);
+	
+	// Este método es para obtener el usuario por User ID
+	UserEntity findUserByUserId(String userId);
 }
