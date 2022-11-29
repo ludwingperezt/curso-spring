@@ -82,9 +82,26 @@ public class UserController {
 		return returnValue;
 	}
 	
-	@PutMapping
-	public String updateUser() {
-		return "user updated";
+	@PutMapping(path="/{userid}", 
+				consumes= {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}, 
+				produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+	public UserRest updateUser(@PathVariable String userid, @RequestBody UserDetailRequestModel userDetail) {
+		UserRest returnValue = new UserRest();
+		
+		if (userDetail.getFirstName().isEmpty()) throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
+		
+		UserDto userDto = new UserDto();
+		
+		// BeanUtils.copyProperties() se usa para llenar los datos del objeto DTO con 
+		// los datos del objeto que se recibió como body del Request.
+		BeanUtils.copyProperties(userDetail, userDto);
+		
+		UserDto updatedUser = userService.updateUser(userid, userDto);
+
+		// Se copian los datos del usuario recién creado al objeto de respuesta.
+		BeanUtils.copyProperties(updatedUser, returnValue);
+		
+		return returnValue;
 	}
 	
 	@DeleteMapping

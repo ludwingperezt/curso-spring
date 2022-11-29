@@ -10,11 +10,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import dev.ludwing.mobileappws.exceptions.UserServiceException;
 import dev.ludwing.mobileappws.io.entity.UserEntity;
 import dev.ludwing.mobileappws.io.repositories.UserRepository;
 import dev.ludwing.mobileappws.service.UserService;
 import dev.ludwing.mobileappws.shared.Utils;
 import dev.ludwing.mobileappws.shared.dto.UserDto;
+import dev.ludwing.mobileappws.ui.model.response.ErrorMessages;
 
 /**
  * Clase que implementa la interfaz UserService, la cual define las operaciones
@@ -112,6 +114,27 @@ public class UserServiceImpl implements UserService {
 		BeanUtils.copyProperties(userEntity, userDto);		
 		
 		return userDto;
+	}
+
+	/**
+	 * Función que actualiza los datos de un usuario.
+	 */
+	@Override
+	public UserDto updateUser(String userId, UserDto user) {
+		UserDto userDtoResponse = new UserDto();
+		
+		UserEntity userEntity = userRepository.findUserByUserId(userId);
+		
+		if (userEntity == null) throw new UserServiceException(ErrorMessages.NO_RECORD_FOUND.getErrorMessage());
+		
+		userEntity.setFirstName(user.getFirstName());
+		userEntity.setLastName(user.getLastName());
+		
+		UserEntity updatedUser = userRepository.save(userEntity);
+		
+		BeanUtils.copyProperties(updatedUser, userDtoResponse);
+		
+		return userDtoResponse;
 	}
 
 }
