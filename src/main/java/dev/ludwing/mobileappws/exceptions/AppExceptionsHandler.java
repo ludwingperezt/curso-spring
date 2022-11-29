@@ -7,9 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
 import dev.ludwing.mobileappws.ui.model.response.ErrorMessage;
+import dev.ludwing.mobileappws.ui.model.response.GenericErrorMessage;
 
 /**
  * Esta clase es la responsable de manejar las excepciones que resulten de la aplicación.
@@ -36,6 +38,27 @@ public class AppExceptionsHandler {
 		
 		ErrorMessage exMessage = new ErrorMessage(new Date(), ex.getMessage());
 		
+		return new ResponseEntity<>(exMessage, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+	}
+	
+	/**
+	 * Para hacer un Handling de otras excepciones que NO sean UserServiceExceptions se usa este handler.
+	 * @param ex
+	 * @param request
+	 * @return
+	 */
+	@ExceptionHandler(value= {Exception.class})
+	public ResponseEntity<Object> handleOtherException(Exception ex, WebRequest request) {
+
+		String uri = ((ServletWebRequest) request).getRequest().getRequestURI();
+
+		GenericErrorMessage exMessage = new GenericErrorMessage(new Date(), 
+																HttpStatus.INTERNAL_SERVER_ERROR.value(), 
+																HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), 
+																ex.getMessage(), 
+																uri);
+		
 		return new ResponseEntity<>(exMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+	
 }
