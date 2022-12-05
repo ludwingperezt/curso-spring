@@ -19,7 +19,8 @@
 
 	- Moverse a la carpeta root del proyecto
 	- Verificar que todas las dependencias están instaladas y luego compilar el 
-	  proyecto:
+	  proyecto (verificar que todos los valores del archivo applications.settings sean los
+	  adecuados para el despliegue):
 	  ´´´
 	  mvn install
 	  ´´´
@@ -59,4 +60,5 @@
 		(War significa Web Application aRchive).
 	- Agregar la dependencia spring-boot-starter-tomcat con scope provided para indicar
 	  que tomcat se agrega como dependencia pero solo en runtime y no en compile time.
+	- Compilar el proyecto.
 	  
