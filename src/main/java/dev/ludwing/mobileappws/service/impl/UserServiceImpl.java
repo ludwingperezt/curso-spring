@@ -129,13 +129,13 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public UserDto getUserByUserId(String userId) {
-		UserDto userDto = new UserDto();
-		
+
 		UserEntity userEntity = userRepository.findUserByUserId(userId);
 		
 		if (userEntity == null) throw new UserServiceException("User with ID: " + userId + " not found.");
 		
-		BeanUtils.copyProperties(userEntity, userDto);		
+		ModelMapper mapper = new ModelMapper();
+		UserDto userDto = mapper.map(userEntity, UserDto.class);
 		
 		return userDto;
 	}
@@ -181,6 +181,9 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public List<UserDto> getUsers(int page, int limit) {
+		
+		ModelMapper mapper = new ModelMapper();
+		
 		List<UserDto> returnValue = new ArrayList<>();
 		
 		// Esta es la configuración de la paginación al solicitar los registros.
@@ -195,8 +198,9 @@ public class UserServiceImpl implements UserService {
 		// La lista de registros obtenida se convierte a una lista de objetos tipo UserDto
 		// que es devuelta a la función que invocó la consulta.
 		for (UserEntity userEntity: users) {
-			UserDto userDto = new UserDto();
-			BeanUtils.copyProperties(userEntity, userDto);
+
+			UserDto userDto = mapper.map(userEntity, UserDto.class);
+			
 			returnValue.add(userDto);
 		}
 		

@@ -52,10 +52,12 @@ public class UserController {
 	 */
 	@GetMapping(path="/{userid}", produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})  // Mapea la función al método GET 
 	public UserRest getUser(@PathVariable String userid) {
-		UserRest returnValue = new UserRest();
 		
 		UserDto userDto = userService.getUserByUserId(userid);
-		BeanUtils.copyProperties(userDto, returnValue);
+		
+		ModelMapper modelMapper = new ModelMapper();
+		// BeanUtils.copyProperties(userDto, returnValue);
+		UserRest returnValue = modelMapper.map(userDto, UserRest.class);
 		
 		return returnValue;
 	}
@@ -147,11 +149,12 @@ public class UserController {
 		
 		List<UserDto> usersDtos = userService.getUsers(page, limit);
 		
+		ModelMapper mapper = new ModelMapper();
+		
 		// Recorrer la lista de usuarios que devuelve la consulta y convertirlos
 		// al tipo de objeto que se retorna al cliente.
 		for (UserDto userDto: usersDtos) {
-			UserRest userModel = new UserRest();
-			BeanUtils.copyProperties(userDto, userModel);
+			UserRest userModel = mapper.map(userDto, UserRest.class);
 			listUsers.add(userModel);
 		}
 		
