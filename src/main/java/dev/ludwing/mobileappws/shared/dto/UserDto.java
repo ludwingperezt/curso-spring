@@ -1,6 +1,7 @@
 package dev.ludwing.mobileappws.shared.dto;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Clase de acceso a datos de usuarios.
@@ -21,7 +22,8 @@ public class UserDto implements Serializable {
 	private String password;
 	private String encryptedPassword;
 	private String emailVerificationToken;
-	
+	private List<AddressDto> addresses;
+
 	// el campo emailVerificationStatus se pone a false para que al crear
 	// el objeto en la base de datos, el valor que tenga por defecto sea false.
 	private Boolean emailVerificationStatus = false;
@@ -96,6 +98,14 @@ public class UserDto implements Serializable {
 
 	public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
 		this.emailVerificationStatus = emailVerificationStatus;
+	}
+
+	public List<AddressDto> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(List<AddressDto> addresses) {
+		this.addresses = addresses;
 	}
 
 }
