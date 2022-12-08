@@ -82,12 +82,14 @@ public class WebSecurity {
 		
 		// CSRF se desactiva porque no se utiliza en stateless API's
 		// Luego se configura que todas las peticiones POST a /users no requieran autenticación Y requieren
+		// Todas las peticiones GET a "/" (raiz) de la aplicación deben permitirse porque estas son de status para AWS beanstalk.
 		// que se use el filtro de autenticación declarado en la clase AuthenticationFilter.
 		// Todas las demás peticiones Sí deben ir autenticadas
 		// Se agregan los filtros de autenticación y autorización
 		// Se configura el framework para que la API sea stateless.
 		http.csrf().disable()
 			.authorizeHttpRequests().antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
+			.antMatchers(HttpMethod.GET, "/").permitAll()
 			.anyRequest().authenticated()
 			.and().addFilter(filter).addFilter(filterAuthorization)
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
