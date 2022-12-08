@@ -1,11 +1,14 @@
 package dev.ludwing.mobileappws.io.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  * Esta clase define la tabla que se usará en la base de datos y sus campos.
@@ -51,6 +54,14 @@ public class UserEntity implements Serializable {
 	// sea false, la propiedad se iguala a false.
 	@Column(nullable = false)
 	private Boolean emailVerificationStatus = false;
+	
+	// mappedBy: Debe tener el nombre del campo (en la clase/tabla hija) que hace
+	// 	referencia al objeto padre, es decir a esta misma clase.
+	// cascade: Indica que los cambios se propagan hacia clases hijas (tablas relacionadas).
+	// 	por ejemplo, cuando se guarda un usuario, también se guarda la lista de direcciones
+	//  asociadas a ese usuario.
+	@OneToMany(mappedBy="userDetails", cascade=CascadeType.ALL)
+	private List<AddressEntity> addresses;
 
 	public long getId() {
 		return id;
@@ -114,6 +125,14 @@ public class UserEntity implements Serializable {
 
 	public void setEmailVerificationStatus(Boolean emailVerificationStatus) {
 		this.emailVerificationStatus = emailVerificationStatus;
+	}
+
+	public List<AddressEntity> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(List<AddressEntity> addresses) {
+		this.addresses = addresses;
 	}
 
 }

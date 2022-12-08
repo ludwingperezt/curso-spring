@@ -1,5 +1,7 @@
 package dev.ludwing.mobileappws.ui.model.response;
 
+import java.util.List;
+
 /**
  * Clase que se utiliza para respuestas a requests.
  * 
@@ -12,6 +14,7 @@ public class UserRest {
 	private String firstName;
 	private String lastName;
 	private String email;
+	private List<AddressRest> addresses;
 
 	public String getUserId() {
 		return userId;
@@ -45,4 +48,13 @@ public class UserRest {
 		this.email = email;
 	}
 
+	public List<AddressRest> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(List<AddressRest> addresses) {
+		this.addresses = addresses;
+	}
+
+	
 }

@@ -3,6 +3,7 @@ package dev.ludwing.mobileappws.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import dev.ludwing.mobileappws.io.entity.UserEntity;
 import dev.ludwing.mobileappws.io.repositories.UserRepository;
 import dev.ludwing.mobileappws.service.UserService;
 import dev.ludwing.mobileappws.shared.Utils;
+import dev.ludwing.mobileappws.shared.dto.AddressDto;
 import dev.ludwing.mobileappws.shared.dto.UserDto;
 import dev.ludwing.mobileappws.ui.model.response.ErrorMessages;
 
@@ -56,20 +58,37 @@ public class UserServiceImpl implements UserService {
 		UserEntity existingUser = userRepository.findUserByEmail(user.getEmail());
 		
 		if (existingUser != null) throw new RuntimeException("Record already exists");
+		
+		for (AddressDto tmpAddress: user.getAddresses()) {
+			tmpAddress.setUserDetails(user);
+			tmpAddress.setAddressId(utils.generateAddressId(30));
+		}
+		
+		// Si el ciclo for anterior no funciona, utilizar este
+//		int i = 0;
+//		int addressLength = user.getAddresses().size();
+//		for (i=0; i < addressLength; i++) {
+//			AddressDto address = user.getAddresses().get(i);
+//			address.setUserDetails(user);
+//			address.setAddressId(utils.generateAddressId(30));
+//			user.getAddresses().set(i, address);
+//		}
 
-		UserEntity userEntity = new UserEntity();
-		BeanUtils.copyProperties(user, userEntity);
+		ModelMapper mapper = new ModelMapper();
+		// BeanUtils.copyProperties(user, userEntity);
+		UserEntity userEntity = mapper.map(user, UserEntity.class);
 		
 		String publicUserId = utils.generateUserId(30);
 		
 		userEntity.setEncryptedPassword(encoder.encode(user.getPassword()));  // Encriptación de la contraseña
 		userEntity.setUserId(publicUserId); // Generar el ID único alfanumérico del usuario.
 		
+		// Iterar sobre la lista de direcciones del usuario y generar el ID para cada una de ellas.
+		
 		UserEntity storedUserDetails = userRepository.save(userEntity);
 		
 		// Regresar el valor recién guardado al controller
-		UserDto returnValue = new UserDto();
-		BeanUtils.copyProperties(storedUserDetails, returnValue);
+		UserDto returnValue = mapper.map(storedUserDetails, UserDto.class);
 				
 		return returnValue;
 	}

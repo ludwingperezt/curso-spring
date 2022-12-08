@@ -3,6 +3,7 @@ package dev.ludwing.mobileappws.ui.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -71,20 +72,22 @@ public class UserController {
 	@PostMapping(consumes= {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}, 
 					produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
 	public UserRest createUser(@RequestBody UserDetailRequestModel userDetails) throws Exception {
-		UserRest returnValue = new UserRest();
-		
+
 		if (userDetails.getFirstName().isEmpty()) throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
-		
-		UserDto userDto = new UserDto();
-		
+
 		// BeanUtils.copyProperties() se usa para llenar los datos del objeto DTO con 
 		// los datos del objeto que se recibió como body del Request.
-		BeanUtils.copyProperties(userDetails, userDto);
+		// BeanUtils.copyProperties(userDetails, userDto);
+		// BeanUtils no es tan bueno para mapear objetos más complejos, por ello a partir
+		// de ahora se utiliza ModelMapper
+		ModelMapper modelMapper = new ModelMapper();
+		UserDto userDto = modelMapper.map(userDetails, UserDto.class);
 		
 		UserDto createdUser = userService.createUser(userDto);
 
 		// Se copian los datos del usuario recién creado al objeto de respuesta.
-		BeanUtils.copyProperties(createdUser, returnValue);
+		// BeanUtils.copyProperties(createdUser, returnValue);
+		UserRest returnValue = modelMapper.map(createdUser, UserRest.class);
 		
 		return returnValue;
 	}
