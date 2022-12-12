@@ -8,10 +8,14 @@ import dev.ludwing.mobileappws.shared.dto.UserDto;
  * Al extender de la clase RepresentationModel ahora se da soporte a HATEOAS
  * pudiendo agregar Hypermedia Links a las respuestas enviadas al usuario.
  * 
+ * Si el retorno de los enlaces HATEOAS se hace mediante un EntityModel<T> entonces
+ * no es necesario derivar esta clase de RepresentationModel.
+ * 
  * @author ludwingp
  *
  */
-public class AddressRest extends RepresentationModel<AddressRest> {
+// public class AddressRest extends RepresentationModel<AddressRest> {
+public class AddressRest {
 
 	private String addressId;
 	private String city;

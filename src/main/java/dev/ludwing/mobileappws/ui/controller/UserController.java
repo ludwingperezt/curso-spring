@@ -2,12 +2,14 @@ package dev.ludwing.mobileappws.ui.controller;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
@@ -206,7 +208,7 @@ public class UserController {
 	 * @return
 	 */
 	@GetMapping(path="/{userid}/addresses/{addressId}", produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}) 
-	public AddressRest getAddress(@PathVariable String userid, @PathVariable String addressId) {
+	public EntityModel<AddressRest> getAddress(@PathVariable String userid, @PathVariable String addressId) {
 		AddressDto addressDto = addressService.getAddress(addressId);
 		ModelMapper modelMapper = new ModelMapper();
 		
@@ -237,10 +239,13 @@ public class UserController {
 				.slash(addressId)
 				.withSelfRel();
 		
-		returnValue.add(userLink);
-		returnValue.add(userAddressesLink);
-		returnValue.add(selfLink);
+//		returnValue.add(userLink);
+//		returnValue.add(userAddressesLink);
+//		returnValue.add(selfLink);
 		
-		return returnValue;
+		// Si se utiliza esta forma de retornar los enlaces en la respuesta (a través de retornar
+		// un EntityModel<Clase> entonces ya no es necesario derivar AddressRest de RepresentationModel
+		
+		return EntityModel.of(returnValue, Arrays.asList(userLink, userAddressesLink, selfLink));
 	}
 }
