@@ -41,7 +41,7 @@ import dev.ludwing.mobileappws.ui.model.response.UserRest;
 // La anotación @RequestMapping sirve para enrutar acciones con paths
 
 @RestController
-@RequestMapping("users") // GET|POST|PUT|DELETE http://localhost/users
+@RequestMapping("/users") // GET|POST|PUT|DELETE http://localhost/users
 public class UserController {
 	
 	// La anotación @Autowired es para indicar la inyección de dependencias, en este caso
@@ -225,18 +225,23 @@ public class UserController {
 		// 2. Generar el enlace a la lista de direcciones del usuario:
 		// http://localhost:8080/users/<userId>/addresses
 		// Se usa .withRel("addresses") para darle un nombre al enlace, pero en realidad puede ser cualquier texto.
-		Link userAddressesLink = WebMvcLinkBuilder.linkTo(UserController.class)
-				.slash(userid)
-				.slash("addresses")
+		// Si se usa methodOn() entonces no es necesario construir manualmente la URL con .slash(), basta con
+		// llamar a la función mapeada al endpoint que se desea linkear y enviarle los parámetros que requiera
+		// la función.
+		Link userAddressesLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
+				.getUserAddresses(userid))
+				//.slash(userid)
+				//.slash("addresses")
 				.withRel("addresses");
 		
 		// 3. Generar el enlace self
 		// http://localhost:8080/users/<userId>/addresses/<addressId>
 		// Se usa .withSelfRel() para indicar que es el enlace al recurso mismo.
-		Link selfLink = WebMvcLinkBuilder.linkTo(UserController.class)
-				.slash(userid)
-				.slash("addresses")
-				.slash(addressId)
+		Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
+				.getAddress(userid, addressId))
+				//.slash(userid)
+				//.slash("addresses")
+				//.slash(addressId)
 				.withSelfRel();
 		
 //		returnValue.add(userLink);
