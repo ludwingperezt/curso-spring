@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
@@ -176,11 +177,16 @@ public class UserController {
 	/**
 	 * Este es el endpoint para obtener la lista de direcciones de un usuario.
 	 * 
+	 * Se retorna una instancia de CollectionModel<AddressRest> para que se genere
+	 * un objeto JSON que contenga la lista de los elementos solicitados y también los
+	 * enlaces de navegación. 
+	 * 
+	 * 
 	 * @param userid
 	 * @return
 	 */
 	@GetMapping(path="/{userid}/addresses", produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}) 
-	public List<AddressRest> getUserAddresses(@PathVariable String userid) {
+	public CollectionModel<AddressRest> getUserAddresses(@PathVariable String userid) {
 		
 		List<AddressRest> returnValue = new ArrayList<>();
 		
@@ -197,7 +203,13 @@ public class UserController {
 			returnValue = modelMapper.map(addressesDto, listType);
 		}
 		
-		return returnValue;
+		// Generar los Links de navegación:
+		Link userLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userid).withRel("user");
+		Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
+				.getUserAddresses(userid))
+				.withSelfRel();
+		
+		return CollectionModel.of(returnValue, userLink);
 	}
 
 	/**
