@@ -11,11 +11,13 @@ import dev.ludwing.mobileappws.shared.dto.UserDto;
  * Si el retorno de los enlaces HATEOAS se hace mediante un EntityModel<T> entonces
  * no es necesario derivar esta clase de RepresentationModel.
  * 
+ * Se vuelve a derivar de la clase RepresentationModel<AddressRest> para que en el endpoint
+ * de listado de direcciones, cada dirección tenga los enlaces de navegación agregados.
+ * 
  * @author ludwingp
  *
  */
-// public class AddressRest extends RepresentationModel<AddressRest> {
-public class AddressRest {
+public class AddressRest extends RepresentationModel<AddressRest> {
 
 	private String addressId;
 	private String city;

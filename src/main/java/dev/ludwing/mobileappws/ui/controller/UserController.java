@@ -181,6 +181,9 @@ public class UserController {
 	 * un objeto JSON que contenga la lista de los elementos solicitados y también los
 	 * enlaces de navegación. 
 	 * 
+	 * que cada uno
+	 * de los elementos de la lista retornada tenga los enlaces de navegación que
+	 * tendría cada uno en el endpoint de detalle.
 	 * 
 	 * @param userid
 	 * @return
@@ -201,6 +204,15 @@ public class UserController {
 			// objeto ModelMapper.
 			Type listType = new TypeToken<List<AddressRest>>() {}.getType();
 			returnValue = modelMapper.map(addressesDto, listType);
+			
+			// Este recorrido de la lista de Direcciones se hace para agregar los enlaces de navegación embebidos.
+			// En este caso solo se agrega el self link para acceder directamente a ese recurso.
+			for (AddressRest addressRest : returnValue) {
+				Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(UserController.class)
+						.getAddress(userid, addressRest.getAddressId()))
+						.withSelfRel();
+				addressRest.add(selfLink);
+			}
 		}
 		
 		// Generar los Links de navegación:
