@@ -8,6 +8,8 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -208,6 +210,37 @@ public class UserController {
 		AddressDto addressDto = addressService.getAddress(addressId);
 		ModelMapper modelMapper = new ModelMapper();
 		
-		return modelMapper.map(addressDto, AddressRest.class);
+		AddressRest returnValue = modelMapper.map(addressDto, AddressRest.class);
+		
+		// Aquí se generan los links de navegación HATEOAS
+
+		// Agregar los links a la respuesta.
+		// 1. Generar el enlace al detalle del usuario:
+		// http://localhost:8080/users/<userId>
+		// Se usa .withRel("user") para darle un nombre al enlace, pero en realidad puede ser cualquier texto.
+		Link userLink = WebMvcLinkBuilder.linkTo(UserController.class).slash(userid).withRel("user");
+		
+		// 2. Generar el enlace a la lista de direcciones del usuario:
+		// http://localhost:8080/users/<userId>/addresses
+		// Se usa .withRel("addresses") para darle un nombre al enlace, pero en realidad puede ser cualquier texto.
+		Link userAddressesLink = WebMvcLinkBuilder.linkTo(UserController.class)
+				.slash(userid)
+				.slash("addresses")
+				.withRel("addresses");
+		
+		// 3. Generar el enlace self
+		// http://localhost:8080/users/<userId>/addresses/<addressId>
+		// Se usa .withSelfRel() para indicar que es el enlace al recurso mismo.
+		Link selfLink = WebMvcLinkBuilder.linkTo(UserController.class)
+				.slash(userid)
+				.slash("addresses")
+				.slash(addressId)
+				.withSelfRel();
+		
+		returnValue.add(userLink);
+		returnValue.add(userAddressesLink);
+		returnValue.add(selfLink);
+		
+		return returnValue;
 	}
 }

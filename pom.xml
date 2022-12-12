@@ -36,12 +36,14 @@
 </dependency>
 
 <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security -->
+<!-- Plugin para manejar autenticación -->
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-security</artifactId>
 </dependency>
 
 <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
+<!-- Plugin para manejar JWT -->
 <dependency>
     <groupId>io.jsonwebtoken</groupId>
     <artifactId>jjwt-api</artifactId>
@@ -49,6 +51,7 @@
 </dependency>
 
 <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl -->
+<!-- Plugin para manejar JWT (debe usarse junto a jjwt-api -->
 <dependency>
     <groupId>io.jsonwebtoken</groupId>
     <artifactId>jjwt-impl</artifactId>
@@ -56,6 +59,7 @@
     <scope>runtime</scope>
 </dependency>
 
+<!-- Plugin para manejar JWT con JSON -->
 <dependency>
     <groupId>io.jsonwebtoken</groupId>
     <artifactId>jjwt-jackson</artifactId> <!-- or jjwt-gson if Gson is preferred -->
@@ -64,23 +68,34 @@
 </dependency>
 
 <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml -->
+<!-- Plugin para dar soporte a respuestas y request XML -->
 <dependency>
     <groupId>com.fasterxml.jackson.dataformat</groupId>
     <artifactId>jackson-dataformat-xml</artifactId>
 </dependency>
 
 <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-tomcat -->
+<!-- Plugin para indicar que tomcat no debe adjuntarse al paquete de la aplicación (archivo .war) -->
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-tomcat</artifactId>
     <scope>provided</scope>
 </dependency>
 
+<!-- Plugin para copiado avanzado entre objetos. -->
 <dependency>
   <groupId>org.modelmapper</groupId>
   <artifactId>modelmapper</artifactId>
   <version>3.0.0</version>
 </dependency>
+
+<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-hateoas -->
+<!-- Plugin para dar soporte a HATEOAS -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-hateoas</artifactId>
+</dependency>
+
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

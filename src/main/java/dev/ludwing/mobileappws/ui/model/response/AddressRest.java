@@ -1,8 +1,17 @@
 package dev.ludwing.mobileappws.ui.model.response;
 
+import org.springframework.hateoas.RepresentationModel;
+
 import dev.ludwing.mobileappws.shared.dto.UserDto;
 
-public class AddressRest {
+/**
+ * Al extender de la clase RepresentationModel ahora se da soporte a HATEOAS
+ * pudiendo agregar Hypermedia Links a las respuestas enviadas al usuario.
+ * 
+ * @author ludwingp
+ *
+ */
+public class AddressRest extends RepresentationModel<AddressRest> {
 
 	private String addressId;
 	private String city;
