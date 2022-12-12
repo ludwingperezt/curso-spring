@@ -1,9 +1,11 @@
 package dev.ludwing.mobileappws.ui.controller;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,9 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.ludwing.mobileappws.exceptions.UserServiceException;
+import dev.ludwing.mobileappws.service.AddressService;
 import dev.ludwing.mobileappws.service.UserService;
+import dev.ludwing.mobileappws.shared.dto.AddressDto;
 import dev.ludwing.mobileappws.shared.dto.UserDto;
 import dev.ludwing.mobileappws.ui.model.request.UserDetailRequestModel;
+import dev.ludwing.mobileappws.ui.model.response.AddressRest;
 import dev.ludwing.mobileappws.ui.model.response.ErrorMessages;
 import dev.ludwing.mobileappws.ui.model.response.OperationStatusModel;
 import dev.ludwing.mobileappws.ui.model.response.RequestOperationName;
@@ -39,6 +44,9 @@ public class UserController {
 	// el del servicio de acceso a datos de Usuarios.
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	AddressService addressService;
 
 	/**
 	 * El parámetro "produces" indica qué tipo de respuesta se enviará al cliente.  Si solo se coloca un valor
@@ -159,5 +167,32 @@ public class UserController {
 		}
 		
 		return listUsers;
+	}
+	
+	/**
+	 * Este es el endpoint para obtener la lista de direcciones de un usuario.
+	 * 
+	 * @param userid
+	 * @return
+	 */
+	@GetMapping(path="/{userid}/addresses", produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}) 
+	public List<AddressRest> getUserAddresses(@PathVariable String userid) {
+		
+		List<AddressRest> returnValue = new ArrayList<>();
+		
+		List<AddressDto> addressesDto = addressService.getAddresses(userid);
+		
+		if (addressesDto != null && !addressesDto.isEmpty())
+		{
+			ModelMapper modelMapper = new ModelMapper();
+
+			// Este snippet es para convertir la lista de objetos AddressDto devuelta por la consulta a la lista
+			// de AddressRest que debe retornar el endpoint al cliente.  Esta conversión se hace a través del
+			// objeto ModelMapper.
+			Type listType = new TypeToken<List<AddressRest>>() {}.getType();
+			returnValue = modelMapper.map(addressesDto, listType);
+		}
+		
+		return returnValue;
 	}
 }
