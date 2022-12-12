@@ -195,4 +195,19 @@ public class UserController {
 		
 		return returnValue;
 	}
+
+	/**
+	 * Este es el endpoint para obtener una dirección en específico.
+	 * 
+	 * @param userid
+	 * @param addressId
+	 * @return
+	 */
+	@GetMapping(path="/{userid}/addresses/{addressId}", produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}) 
+	public AddressRest getAddress(@PathVariable String userid, @PathVariable String addressId) {
+		AddressDto addressDto = addressService.getAddress(addressId);
+		ModelMapper modelMapper = new ModelMapper();
+		
+		return modelMapper.map(addressDto, AddressRest.class);
+	}
 }

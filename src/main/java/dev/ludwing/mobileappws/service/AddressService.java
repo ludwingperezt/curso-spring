@@ -6,4 +6,5 @@ import dev.ludwing.mobileappws.shared.dto.AddressDto;
 
 public interface AddressService {
 	List<AddressDto> getAddresses(String userId);
+	AddressDto getAddress(String addressId);
 }

@@ -15,5 +15,6 @@ import dev.ludwing.mobileappws.io.entity.UserEntity;
 public interface AddressRepository extends CrudRepository<AddressEntity, Long> {
 	
 	List<AddressEntity> findAllByUserDetails(UserEntity user);
+	AddressEntity findByAddressId(String addressId);
 
 }

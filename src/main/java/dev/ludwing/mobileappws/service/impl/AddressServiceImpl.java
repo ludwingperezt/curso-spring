@@ -42,4 +42,23 @@ public class AddressServiceImpl implements AddressService {
 		return returnValue;
 	}
 
+	/**
+	 * Implementación para obtener una sola dirección.
+	 * 
+	 */
+	@Override
+	public AddressDto getAddress(String addressId) {
+		AddressDto returnValue = null;
+		
+		AddressEntity addressEntity = addressRepository.findByAddressId(addressId);
+		
+		if (addressEntity != null) {
+			returnValue = new ModelMapper().map(addressEntity, AddressDto.class);
+		}
+		
+		return returnValue;
+	}
+	
+	
+
 }
