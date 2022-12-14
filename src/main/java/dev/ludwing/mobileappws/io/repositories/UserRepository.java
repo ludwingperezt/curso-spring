@@ -38,4 +38,7 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, L
 	
 	// Este método es para obtener el usuario por User ID
 	UserEntity findUserByUserId(String userId);
+	
+	// Busca al usuario que tenga el mismo token de verificación de email
+	UserEntity findUserByEmailVerificationToken(String token);
 }

@@ -277,4 +277,31 @@ public class UserController {
 		
 		return EntityModel.of(returnValue, Arrays.asList(userLink, userAddressesLink, selfLink));
 	}
+	
+	/**
+	 * Endpoint para verificar la validez de un token para validación de correo electrónico.
+	 * 
+	 * Este endpoint no debe estar protegido por autenticación.
+	 * 
+	 * @param token
+	 * @return
+	 */
+	@GetMapping(path="/email-verification", produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}) 
+	public OperationStatusModel verifyEmailToken(@RequestParam(value="token") String token) {
+		
+		OperationStatusModel rValue = new OperationStatusModel();
+		rValue.setOperationName(RequestOperationName.VERIFY_EMAIL.name());
+		
+		boolean isVerified = userService.verifyEmailToken(token);
+		
+		if (isVerified) {
+			rValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+		}
+		else {
+			rValue.setOperationResult(RequestOperationStatus.ERROR.name());
+		}
+		
+		return rValue;
+	}
+	
 }

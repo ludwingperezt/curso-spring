@@ -1,9 +1,19 @@
 package dev.ludwing.mobileappws.shared;
 
+import java.security.Key;
 import java.security.SecureRandom;
+import java.util.Date;
 import java.util.Random;
 
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
+
 import org.springframework.stereotype.Component;
+
+import dev.ludwing.mobileappws.security.SecurityConstants;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 /**
  * Esta clase queda en el paquete "shared" porque se utilizará para definir funciones que tienen que
@@ -40,4 +50,27 @@ public class Utils {
 
         return new String(returnValue);
     }
+	
+	/**
+	 * Verifica el token enviado por correo electrónico al cliente cuando ha
+	 * @param token
+	 * @return
+	 */
+	public static boolean hasTokenExpired(String token) {
+		SignatureAlgorithm mAlgorithm = SignatureAlgorithm.HS512;
+		
+		byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SecurityConstants.getTokenSecret());
+		Key mKey = new SecretKeySpec(apiKeySecretBytes, mAlgorithm.getJcaName());
+		
+		Claims claims = Jwts.parserBuilder()
+				.setSigningKey(mKey)
+				.build()
+				.parseClaimsJws(token)
+				.getBody();
+		
+		Date tokenExpirationDate = claims.getExpiration();
+		Date today = new Date();
+		
+		return tokenExpirationDate.before(today);
+	}
 }
