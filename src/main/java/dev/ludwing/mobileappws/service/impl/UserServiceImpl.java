@@ -82,6 +82,8 @@ public class UserServiceImpl implements UserService {
 		
 		userEntity.setEncryptedPassword(encoder.encode(user.getPassword()));  // Encriptación de la contraseña
 		userEntity.setUserId(publicUserId); // Generar el ID único alfanumérico del usuario.
+		userEntity.setEmailVerificationToken(Utils.generateEmailVerificationToken(publicUserId));
+		userEntity.setEmailVerificationStatus(false);
 		
 		// Iterar sobre la lista de direcciones del usuario y generar el ID para cada una de ellas.
 		

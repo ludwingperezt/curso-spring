@@ -73,4 +73,25 @@ public class Utils {
 		
 		return tokenExpirationDate.before(today);
 	}
+	
+	/**
+	 * Retorna el token de verificación de email.
+	 * @param publicUserId
+	 * @return
+	 */
+	public static String generateEmailVerificationToken(String publicUserId) {
+		
+		SignatureAlgorithm mAlgorithm = SignatureAlgorithm.HS512;
+		
+		byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SecurityConstants.getTokenSecret());
+		Key mKey = new SecretKeySpec(apiKeySecretBytes, mAlgorithm.getJcaName());
+		
+		String token = Jwts.builder()
+				.setSubject(publicUserId)
+				.setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
+				.signWith(mKey, mAlgorithm)
+				.compact();
+		
+		return token;
+	}
 }
