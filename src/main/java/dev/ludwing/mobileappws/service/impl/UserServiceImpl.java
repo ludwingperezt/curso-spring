@@ -22,6 +22,7 @@ import dev.ludwing.mobileappws.exceptions.UserServiceException;
 import dev.ludwing.mobileappws.io.entity.UserEntity;
 import dev.ludwing.mobileappws.io.repositories.UserRepository;
 import dev.ludwing.mobileappws.service.UserService;
+import dev.ludwing.mobileappws.shared.AmazonEmailService;
 import dev.ludwing.mobileappws.shared.Utils;
 import dev.ludwing.mobileappws.shared.dto.AddressDto;
 import dev.ludwing.mobileappws.shared.dto.UserDto;
@@ -90,10 +91,13 @@ public class UserServiceImpl implements UserService {
 		// Iterar sobre la lista de direcciones del usuario y generar el ID para cada una de ellas.
 		
 		UserEntity storedUserDetails = userRepository.save(userEntity);
-		
+
 		// Regresar el valor recién guardado al controller
 		UserDto returnValue = mapper.map(storedUserDetails, UserDto.class);
-				
+		
+		// Enviar el email de verificación
+		new AmazonEmailService().verifyEmail(returnValue);
+		
 		return returnValue;
 	}
 
