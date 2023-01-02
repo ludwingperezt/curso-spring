@@ -311,7 +311,7 @@ public class UserController {
 	 * @param passwordReset
 	 * @return
 	 */
-	@PostMapping(path="/reset-password",
+	@PostMapping(path="/reset-password-request", //
 			consumes= {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}, 
 			produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
 	public OperationStatusModel requestReset(@RequestBody PasswordResetRequestModel passwordReset) {
