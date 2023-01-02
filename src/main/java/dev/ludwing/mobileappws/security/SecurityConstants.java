@@ -9,7 +9,8 @@ public class SecurityConstants {
 	public static final String HEADER_STRING = "Authorization";
 	public static final String SIGN_UP_URL = "/users";
 	public static final String VERIFICATION_EMAIL_URL = "/users/email-verification";
-	public static final String PASSWORD_RESET_URL = "/users/reset-password-request";
+	public static final String PASSWORD_RESET_REQUEST_URL = "/users/reset-password-request";
+	public static final String PASSWORD_RESET_URL = "/users/password-reset";
 //	public static final String TOKEN_SECRET = "IvUUmQsYxKLEkPJEoDludyG7mK4nzCv1l9lOoGp5qTDTm2yMPVCOr+ngwOKKhP/xdD9Q9lDWdRrLFsaiaPkWb5KIjIPXuBXcC48swcmKlk5Pq4ETh1SGLIp5qVYoHAVaK/VF3m9yZewcBIWjLdjPQfhQQ+rUg/9WVoJnS4tW441bDqaiDVVJyeITHp8ZjL/WzdAzhR+Ht7UWhDLz4lzYgBHHiF7qwZE1syCzxQ==";
 	
 	public static final long PASSWORD_RESET_EXPIRATION_TIME = 1000 * 60 * 60; // 1 hora.

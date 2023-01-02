@@ -73,9 +73,11 @@ public class AmazonEmailService {
 				.withSource(FROM);
 		
 		System.out.println(textBodyWithToken);
+
+		// POR el momento no hay implementación del envío de correo con Amazon SES, por eso las siguientes líneas
+		// están conectadas y el valor de retorno por defecto se ha puesto en true.
 		
 		// SendEmailResult result = client.sendEmail(request);
-		
 		//if (result != null && (result.getMessageId() != null && !result.getMessageId().isEmpty())) {
 		//	returnValue = true;
 		//}

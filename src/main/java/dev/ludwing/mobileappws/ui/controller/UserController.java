@@ -29,6 +29,7 @@ import dev.ludwing.mobileappws.service.AddressService;
 import dev.ludwing.mobileappws.service.UserService;
 import dev.ludwing.mobileappws.shared.dto.AddressDto;
 import dev.ludwing.mobileappws.shared.dto.UserDto;
+import dev.ludwing.mobileappws.ui.model.request.PasswordResetModel;
 import dev.ludwing.mobileappws.ui.model.request.PasswordResetRequestModel;
 import dev.ludwing.mobileappws.ui.model.request.UserDetailRequestModel;
 import dev.ludwing.mobileappws.ui.model.response.AddressRest;
@@ -321,6 +322,33 @@ public class UserController {
 		boolean operationResult = userService.requestPasswordReset(passwordReset.getEmail());
 		
 		returnValue.setOperationName(RequestOperationName.REQUEST_PASSWORD_RESET.name());
+		returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
+		
+		if (operationResult) {
+			returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+		}
+		
+		return returnValue;
+	}
+	
+	/**
+	 * Endpoint que ejecuta el usuario para reestrablecer su contraseña.  
+	 * 
+	 * Este endpoint se llama desde el front a través del link que se envía por correo al usuario.
+	 * 
+	 * @param passwordReset
+	 * @return
+	 */
+	@PostMapping(path="/password-reset",
+			consumes= {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}, 
+			produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+	public OperationStatusModel resetPassword(@RequestBody PasswordResetModel passwordReset) {
+		
+		OperationStatusModel returnValue = new OperationStatusModel();
+		
+		boolean operationResult = userService.resetPassword(passwordReset.getToken(), passwordReset.getPassword());
+		
+		returnValue.setOperationName(RequestOperationName.PASSWORD_RESET.name());
 		returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
 		
 		if (operationResult) {
