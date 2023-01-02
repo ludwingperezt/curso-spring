@@ -19,7 +19,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import dev.ludwing.mobileappws.exceptions.UserServiceException;
+import dev.ludwing.mobileappws.io.entity.PasswordResetTokenEntity;
 import dev.ludwing.mobileappws.io.entity.UserEntity;
+import dev.ludwing.mobileappws.io.repositories.PasswordResetTokenRepository;
 import dev.ludwing.mobileappws.io.repositories.UserRepository;
 import dev.ludwing.mobileappws.service.UserService;
 import dev.ludwing.mobileappws.shared.AmazonEmailService;
@@ -50,6 +52,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	BCryptPasswordEncoder encoder;
+	
+	@Autowired
+	PasswordResetTokenRepository passwordResetTokenRepository;
 
 	/**
 	 * Función de servicio que ejecuta la inserción de un registro en la base de datos.
@@ -237,6 +242,29 @@ public class UserServiceImpl implements UserService {
 		}
 		
 		return rValue;
+	}
+
+	@Override
+	public boolean requestPasswordReset(String email) {
+		boolean returnValue = false;
+		
+		UserEntity userEntity = userRepository.findUserByEmail(email);
+		
+		if (userEntity == null) {
+			return returnValue;
+		}
+		
+		String token = Utils.generatePasswordResetToken(userEntity.getUserId());
+		
+		PasswordResetTokenEntity passwordResetTokenEntity = new PasswordResetTokenEntity();
+		passwordResetTokenEntity.setToken(token);
+		passwordResetTokenEntity.setUserDetails(userEntity);
+		
+		passwordResetTokenRepository.save(passwordResetTokenEntity);
+		
+		returnValue = new AmazonEmailService().sendPasswordResetRequest(userEntity.getFirstName(), userEntity.getEmail(), token);
+		
+		return returnValue;
 	}
 
 }

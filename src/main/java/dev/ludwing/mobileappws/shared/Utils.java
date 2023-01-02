@@ -94,4 +94,26 @@ public class Utils {
 		
 		return token;
 	}
+	
+	/**
+	 * Función para generar el token de reset de password. Por motivos de tiempo la implementación es la misma
+	 * que en la función de generar el token para verificar correo, pero deberían ser diferentes implementaciones.
+	 * 
+	 * @param publicUserId
+	 * @return
+	 */
+	public static String generatePasswordResetToken(String publicUserId) {
+		SignatureAlgorithm mAlgorithm = SignatureAlgorithm.HS512;
+		
+		byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SecurityConstants.getTokenSecret());
+		Key mKey = new SecretKeySpec(apiKeySecretBytes, mAlgorithm.getJcaName());
+		
+		String token = Jwts.builder()
+				.setSubject(publicUserId)
+				.setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.PASSWORD_RESET_EXPIRATION_TIME))
+				.signWith(mKey, mAlgorithm)
+				.compact();
+		
+		return token;
+	}
 }

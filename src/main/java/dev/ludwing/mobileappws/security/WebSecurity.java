@@ -90,6 +90,7 @@ public class WebSecurity {
 		http.csrf().disable()
 			.authorizeHttpRequests().antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
 			.antMatchers(HttpMethod.GET, SecurityConstants.VERIFICATION_EMAIL_URL).permitAll()
+			.antMatchers(HttpMethod.POST, SecurityConstants.PASSWORD_RESET_URL).permitAll()
 			.antMatchers(HttpMethod.GET, "/").permitAll()
 			.anyRequest().authenticated()
 			.and().addFilter(filter).addFilter(filterAuthorization)

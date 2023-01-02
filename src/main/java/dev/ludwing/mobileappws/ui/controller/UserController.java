@@ -29,6 +29,7 @@ import dev.ludwing.mobileappws.service.AddressService;
 import dev.ludwing.mobileappws.service.UserService;
 import dev.ludwing.mobileappws.shared.dto.AddressDto;
 import dev.ludwing.mobileappws.shared.dto.UserDto;
+import dev.ludwing.mobileappws.ui.model.request.PasswordResetRequestModel;
 import dev.ludwing.mobileappws.ui.model.request.UserDetailRequestModel;
 import dev.ludwing.mobileappws.ui.model.response.AddressRest;
 import dev.ludwing.mobileappws.ui.model.response.ErrorMessages;
@@ -304,4 +305,28 @@ public class UserController {
 		return rValue;
 	}
 	
+	/**
+	 * Controlador para solicitar reset de contraseña.
+	 * 
+	 * @param passwordReset
+	 * @return
+	 */
+	@PostMapping(path="/reset-password",
+			consumes= {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}, 
+			produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+	public OperationStatusModel requestReset(@RequestBody PasswordResetRequestModel passwordReset) {
+		
+		OperationStatusModel returnValue = new OperationStatusModel();
+		
+		boolean operationResult = userService.requestPasswordReset(passwordReset.getEmail());
+		
+		returnValue.setOperationName(RequestOperationName.REQUEST_PASSWORD_RESET.name());
+		returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
+		
+		if (operationResult) {
+			returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
+		}
+		
+		return returnValue;
+	}
 }
