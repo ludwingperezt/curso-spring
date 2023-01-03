@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import dev.ludwing.mobileappws.io.entity.UserEntity;
 import dev.ludwing.mobileappws.io.repositories.UserRepository;
@@ -58,6 +59,27 @@ class UserServiceImplTest {
 		// debe hacer:
 		assertNotNull(userDto);
 		assertEquals("Ludwing", userDto.getFirstName());
+	}
+	
+	@Test
+	final void testGetUser_UsernameNotFoundException() {
+		
+		// En esta parte se configura el mock de UserRepository para que al invocar la función 
+		// "findUserByEmail()" se retorne null, como en el caso de uso cuando no se puede encontrar
+		// un usuario.
+		when(userRepository.findUserByEmail(anyString())).thenReturn(null);
+		
+		// assertThrows verifica que al llamar a la función que se está testeando se lance la excepción
+		// que corresponde, en este caso es UsernameNotFoundException.  El código a testear se coloca
+		// dentro de un ejecutable, el cual es una expresión lambda que contiene la llamada a la función
+		// que se intenta testear.
+		assertThrows(UsernameNotFoundException.class,
+				()-> {
+					// ///////////////////////////////////////////////////////////////////////////////
+					// Esta es la función a testear
+					UserDto userDto = userService.getUser("user@test.com");
+					// ///////////////////////////////////////////////////////////////////////////////
+				});
 	}
 
 }
