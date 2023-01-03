@@ -79,7 +79,7 @@ public class Utils {
 	 * @param publicUserId
 	 * @return
 	 */
-	public static String generateEmailVerificationToken(String publicUserId) {
+	public String generateEmailVerificationToken(String publicUserId) {
 		
 		SignatureAlgorithm mAlgorithm = SignatureAlgorithm.HS512;
 		

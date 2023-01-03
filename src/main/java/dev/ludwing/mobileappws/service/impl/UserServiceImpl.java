@@ -55,6 +55,10 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	PasswordResetTokenRepository passwordResetTokenRepository;
+	
+	// Se anota la clase AmazonEmailService como un servicio inyectado para facilitar el testing.
+	@Autowired
+	AmazonEmailService amazonSES;
 
 	/**
 	 * Función de servicio que ejecuta la inserción de un registro en la base de datos.
@@ -65,7 +69,7 @@ public class UserServiceImpl implements UserService {
 		// Si existe, por el momento lanza una excepción de tiempo de ejecución.
 		UserEntity existingUser = userRepository.findUserByEmail(user.getEmail());
 		
-		if (existingUser != null) throw new RuntimeException("Record already exists");
+		if (existingUser != null) throw new UserServiceException("Record already exists");
 		
 		for (AddressDto tmpAddress: user.getAddresses()) {
 			tmpAddress.setUserDetails(user);
@@ -90,7 +94,7 @@ public class UserServiceImpl implements UserService {
 		
 		userEntity.setEncryptedPassword(encoder.encode(user.getPassword()));  // Encriptación de la contraseña
 		userEntity.setUserId(publicUserId); // Generar el ID único alfanumérico del usuario.
-		userEntity.setEmailVerificationToken(Utils.generateEmailVerificationToken(publicUserId));
+		userEntity.setEmailVerificationToken(utils.generateEmailVerificationToken(publicUserId));
 		userEntity.setEmailVerificationStatus(false);
 		
 		// Iterar sobre la lista de direcciones del usuario y generar el ID para cada una de ellas.
@@ -101,7 +105,7 @@ public class UserServiceImpl implements UserService {
 		UserDto returnValue = mapper.map(storedUserDetails, UserDto.class);
 		
 		// Enviar el email de verificación
-		new AmazonEmailService().verifyEmail(returnValue);
+		amazonSES.verifyEmail(returnValue);
 		
 		return returnValue;
 	}

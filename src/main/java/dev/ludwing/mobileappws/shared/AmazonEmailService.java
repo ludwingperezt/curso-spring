@@ -1,5 +1,7 @@
 package dev.ludwing.mobileappws.shared;
 
+import org.springframework.stereotype.Service;
+
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
@@ -12,6 +14,8 @@ import com.amazonaws.services.simpleemail.model.SendEmailResult;
 
 import dev.ludwing.mobileappws.shared.dto.UserDto;
 
+// Se anota la clase como @Service para que pueda ser inyectada como mock durante el testing.
+@Service
 public class AmazonEmailService {
 
 	final String FROM = "alianzakemomtzij@gmail.com";
