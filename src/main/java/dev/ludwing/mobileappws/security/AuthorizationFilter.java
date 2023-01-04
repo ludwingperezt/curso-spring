@@ -16,6 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
@@ -68,12 +69,23 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 			
 			// FIN SNIPPET.
 			
-			String user = Jwts.parserBuilder()
-					.setSigningKey(mKey)
-					.build()
-					.parseClaimsJws(token)
-					.getBody()
-					.getSubject();
+			String user = null;
+			
+			// Debido a que la función parserBuilder() lanza una excepción de tipo ExpiredJwtException cuando
+			// el token ya ha expirado, es necesario encerrar el parsing en un bloque try-catch.  Si la excepción
+			// salta, entonces el usuario queda como null y entonces no se hace la autenticación
+			try {
+				user = Jwts.parserBuilder()
+						.setSigningKey(mKey)
+						.build()
+						.parseClaimsJws(token)
+						.getBody()
+						.getSubject();
+			}
+			catch (ExpiredJwtException ex) {
+				// Enviar a log que el token ya expiró.
+			}
+			
 			
 			if (user != null) {
 				return new UsernamePasswordAuthenticationToken(user,  null, new ArrayList<>());

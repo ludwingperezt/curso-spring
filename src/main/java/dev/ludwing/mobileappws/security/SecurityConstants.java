@@ -11,6 +11,7 @@ public class SecurityConstants {
 	public static final String VERIFICATION_EMAIL_URL = "/users/email-verification";
 	public static final String PASSWORD_RESET_REQUEST_URL = "/users/reset-password-request";
 	public static final String PASSWORD_RESET_URL = "/users/password-reset";
+	public static final String H2_CONSOLE = "/h2-console/**"; // Esto es para habilitar el acceso a la consola de la base de datos inmemory H2
 //	public static final String TOKEN_SECRET = "IvUUmQsYxKLEkPJEoDludyG7mK4nzCv1l9lOoGp5qTDTm2yMPVCOr+ngwOKKhP/xdD9Q9lDWdRrLFsaiaPkWb5KIjIPXuBXcC48swcmKlk5Pq4ETh1SGLIp5qVYoHAVaK/VF3m9yZewcBIWjLdjPQfhQQ+rUg/9WVoJnS4tW441bDqaiDVVJyeITHp8ZjL/WzdAzhR+Ht7UWhDLz4lzYgBHHiF7qwZE1syCzxQ==";
 	
 	public static final long PASSWORD_RESET_EXPIRATION_TIME = 1000 * 60 * 60; // 1 hora.

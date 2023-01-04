@@ -92,10 +92,15 @@ public class WebSecurity {
 			.antMatchers(HttpMethod.GET, SecurityConstants.VERIFICATION_EMAIL_URL).permitAll()
 			.antMatchers(HttpMethod.POST, SecurityConstants.PASSWORD_RESET_REQUEST_URL).permitAll()
 			.antMatchers(HttpMethod.POST, SecurityConstants.PASSWORD_RESET_URL).permitAll()
+			.antMatchers(SecurityConstants.H2_CONSOLE).permitAll()
 			.antMatchers(HttpMethod.GET, "/").permitAll()
 			.anyRequest().authenticated()
 			.and().addFilter(filter).addFilter(filterAuthorization)
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		
+		// Desactivar para usar H2 console, pero jamás debe subirse esto así a la versión de producción
+		// por seguridad.
+		// http.headers().frameOptions().disable();
 		
 		return http.build();
 	}

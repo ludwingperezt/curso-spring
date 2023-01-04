@@ -49,9 +49,12 @@ public class AmazonEmailService {
 						.withSubject(new Content().withCharset("UTF-8").withData(SUBJECT)))
 				.withSource(FROM);
 		
-		client.sendEmail(request);
+		// Por el momento la función de envío de emails está comentada porque no hay acceso a Amazon SES
+		// en su lugar se colocó una salida por consola.
+		// client.sendEmail(request);
 		
 		System.out.println("Email sent to " + user.getEmail());
+		System.out.println(textBodyWithToken);
 	}
 	
 	public boolean sendPasswordResetRequest(String firstName, String email, String token) {
