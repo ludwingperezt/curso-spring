@@ -113,7 +113,6 @@ public class UserController {
 				consumes= {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}, 
 				produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
 	public UserRest updateUser(@PathVariable String userid, @RequestBody UserDetailRequestModel userDetail) {
-		UserRest returnValue = new UserRest();
 		
 		if (userDetail.getFirstName().isEmpty()) throw new UserServiceException(ErrorMessages.MISSING_REQUIRED_FIELD.getErrorMessage());
 		
@@ -126,7 +125,9 @@ public class UserController {
 		UserDto updatedUser = userService.updateUser(userid, userDto);
 
 		// Se copian los datos del usuario recién creado al objeto de respuesta.
-		BeanUtils.copyProperties(updatedUser, returnValue);
+		//BeanUtils.copyProperties(updatedUser, returnValue);
+		ModelMapper modelMapper = new ModelMapper();
+		UserRest returnValue = modelMapper.map(updatedUser, UserRest.class);
 		
 		return returnValue;
 	}

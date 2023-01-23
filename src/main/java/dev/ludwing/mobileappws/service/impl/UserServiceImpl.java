@@ -166,7 +166,6 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public UserDto updateUser(String userId, UserDto user) {
-		UserDto userDtoResponse = new UserDto();
 		
 		UserEntity userEntity = userRepository.findUserByUserId(userId);
 		
@@ -177,7 +176,9 @@ public class UserServiceImpl implements UserService {
 		
 		UserEntity updatedUser = userRepository.save(userEntity);
 		
-		BeanUtils.copyProperties(updatedUser, userDtoResponse);
+		// BeanUtils.copyProperties(updatedUser, userDtoResponse);
+		ModelMapper mapper = new ModelMapper();
+		UserDto userDtoResponse = mapper.map(updatedUser, UserDto.class);
 		
 		return userDtoResponse;
 	}
