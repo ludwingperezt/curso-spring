@@ -21,3 +21,10 @@ spring.datasource.url=jdbc:h2:mem:testdb
 # Para cambiar el nombre de usuario y contraseña:
 spring.datasource.username=admin
 spring.datasource.password=admin
+
+# Esta línea indica que las consultas se mostrarán en el logging
+logging.level.org.hibernate.SQL=DEBUG
+# Esta línea especifica que cualquier parámetro enviado a cualquier consulta SQL nativa será visible en los logs.
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+# Esta configuración es opcional. Especifica si la salida en los logs debe formatearse para que sea más agradable de leer.
+spring.jpa.properties.hibernate.format_sql=true
