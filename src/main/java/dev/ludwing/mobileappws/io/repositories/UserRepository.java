@@ -126,4 +126,18 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, L
 	 */
 	@Query("SELECT user FROM UserEntity user WHERE user.userId = :userId")
 	UserEntity findUserEntityByUserId(@Param("userId") String userId);
+	
+	/**
+	 * Ejemplo de una consulta que solo retorna un subconjunto de los datos de la entidad pero usando JPQL.
+	 * 
+	 * Igual que en las consultas con SQL nativo que solo retornan un subconjunto de campos de la tabla, en este
+	 * caso también se retorna una lista de arrays de object, donde cada array de la lista representa una
+	 * fila retornada por la consulta y dentro de cada array la primera posición es el primer elemento especificado
+	 * en la query y así sucesivamente.
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	@Query("SELECT u.firstName, u.lastName FROM UserEntity u WHERE u.userId = :userId")
+	List<Object[]> findUserEntityFullNameById(@Param("userId") String userId);
 }

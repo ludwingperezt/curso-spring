@@ -190,5 +190,29 @@ class UserRepositoryTest {
 		assertNotNull(user);
 		assertTrue(user.getUserId().equals(userId));
 	}
+	
+	/**
+	 * Comprobar una consulta de selección con JPQL que solo retorna un subconjunto
+	 * de los atributos de la entidad.
+	 * 
+	 * 
+	 */ 
+	@Test
+	final void testFindUserEntityFullNameById() {
+		String userId = "test_user_ID";
+
+		List<Object[]> records = userRepository.findUserEntityFullNameById(userId);
+		
+		assertNotNull(records);
+		assertEquals(records.size(), 1); // solamente un registro tiene el mismo User ID.
+		
+		Object[] userDetails = records.get(0);
+		
+		String firstName = String.valueOf(userDetails[0]);
+		String lastName = String.valueOf(userDetails[1]);
+		
+		assertNotNull(firstName);
+		assertNotNull(lastName);
+	}
 
 }
