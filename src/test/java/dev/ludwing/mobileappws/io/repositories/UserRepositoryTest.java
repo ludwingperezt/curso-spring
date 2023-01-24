@@ -134,5 +134,28 @@ class UserRepositoryTest {
 		UserEntity user = users.get(0);
 		assertTrue(user.getLastName().contains(keyword) || user.getFirstName().contains(keyword));
 	}
+	
+	@Test
+	void testFindUsersFisrtAndLastNameByKeyword() {
+		String keyword = "za";
+		List<Object[]> users = userRepository.findUsersFisrtAndLastNameByKeyword(keyword);
+		
+		assertNotNull(users);
+		assertTrue(users.size() == 3);
+		
+		Object[] user = users.get(0);
+		
+		// Verificar que solo hay dos campos retornados por cada registro.
+		assertTrue(user.length == 2);
+		
+		String userFirstName = String.valueOf(user[0]);
+		String userLastName = String.valueOf(user[1]);
+		
+		assertNotNull(userFirstName);
+		assertNotNull(userLastName);
+		
+		System.out.println(userFirstName);
+		System.out.println(userLastName);
+	}
 
 }

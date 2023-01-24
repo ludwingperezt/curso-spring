@@ -83,4 +83,14 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, L
 	@Query(value="SELECT * FROM users u WHERE u.first_name LIKE %:keyword% OR u.last_name LIKE %:keyword%",
 			nativeQuery=true)
 	List<UserEntity> findUsersByKeyword(@Param("keyword") String keyword);
+	
+	// Este es un ejemplo de una query que solo retorna un subconjunto de los campos de la consulta.
+	// Esta función en lugar de retornar una lista de UserEntity, lo que retorna es un array de Objects
+	// dependiendo de la cantidad de campos seleccionados.
+	// En el array de Object que representa cada fila de la consulta, el primer elemento corresponde al 
+	// primer campo especificado en la consulta, el segundo elemento del array al segundo elemento de la
+	// consulta y así sucesivamente.
+	@Query(value="SELECT u.first_name, u.last_name FROM users u WHERE u.first_name LIKE %:keyword% OR u.last_name LIKE %:keyword%",
+			nativeQuery=true)
+	List<Object[]> findUsersFisrtAndLastNameByKeyword(@Param("keyword") String keyword);
 }
