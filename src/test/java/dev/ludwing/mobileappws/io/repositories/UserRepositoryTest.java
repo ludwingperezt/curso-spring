@@ -135,6 +135,9 @@ class UserRepositoryTest {
 		assertTrue(user.getLastName().contains(keyword) || user.getFirstName().contains(keyword));
 	}
 	
+	/**
+	 * Comprobar el uso de una query que solo retorna un subconjunto de los campos de una tabla.
+	 */
 	@Test
 	void testFindUsersFisrtAndLastNameByKeyword() {
 		String keyword = "za";
@@ -156,6 +159,24 @@ class UserRepositoryTest {
 		
 		System.out.println(userFirstName);
 		System.out.println(userLastName);
+	}
+	
+	/**
+	 * Comprobar el uso de una query de actualización de registro en la base de datos.
+	 */
+	@Test
+	void testUpdateUserEmailVerificationStatus() {
+		boolean newStatus = true;
+		String userId = "206gAXPMlZP0NpjgydV91VKZh0pLzP";
+		
+		userRepository.updateUserEmailVerificationStatus(newStatus, userId);
+		
+		UserEntity storedDetails = userRepository.findUserByUserId(userId);
+		
+		assertTrue(storedDetails.getEmailVerificationStatus() == newStatus);
+		
+		// Regresar al status original
+		userRepository.updateUserEmailVerificationStatus(!newStatus, userId);
 	}
 
 }

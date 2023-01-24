@@ -4,11 +4,13 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import dev.ludwing.mobileappws.io.entity.UserEntity;
 
@@ -93,4 +95,23 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, L
 	@Query(value="SELECT u.first_name, u.last_name FROM users u WHERE u.first_name LIKE %:keyword% OR u.last_name LIKE %:keyword%",
 			nativeQuery=true)
 	List<Object[]> findUsersFisrtAndLastNameByKeyword(@Param("keyword") String keyword);
+	
+	/**
+	 * Este es un ejemplo de una query que modifica un registro en la base de datos.
+	 * Debido a este mismo motivo, es necesario usar las anotaciones @Transactional para que se haga un
+	 * rollback al momento de fallar la actualización; también es necesario usar @Modifying para indicar
+	 * que la query está modificando un registro en la base de datos.  También se debe hacer esto en caso
+	 * de queries que eliminen registros.  En el caso de la anotación @Transactional, ésta usualmente se
+	 * coloca en las clases de servicio o en los controllers cuando se requiere un control transaccional,
+	 * pero en este caso se colocó aquí porque de momento este método no es utilizado en ningún servicio
+	 * o controller.
+	 * 
+	 * @param emailVerificationStatus
+	 * @param userId
+	 */
+	@Transactional
+	@Modifying
+	@Query(value="UPDATE users SET email_verification_status = :emailVerificationStatus WHERE user_id = :userId",
+			nativeQuery=true)
+	void updateUserEmailVerificationStatus(@Param("emailVerificationStatus") boolean emailVerificationStatus, @Param("userId") String userId);
 }
