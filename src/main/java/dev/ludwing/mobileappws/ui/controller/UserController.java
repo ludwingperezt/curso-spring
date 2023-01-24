@@ -14,6 +14,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,6 +46,9 @@ import dev.ludwing.mobileappws.ui.model.response.UserRest;
 
 @RestController
 @RequestMapping("/users") // GET|POST|PUT|DELETE http://localhost/users
+// @CrossOrigin(origins="*")  // Habilita CORS para todos los dominios (menos seguro)
+// @CrossOrigin(origins="http://localhost:8090") // Habilita CORS para un solo dominio
+// @CrossOrigin(origins={"http://localhost:8090", "http://localhost:8091"}) // Habilita CORS para una lista determinada de dominios.
 public class UserController {
 	
 	// La anotación @Autowired es para indicar la inyección de dependencias, en este caso
@@ -290,6 +294,9 @@ public class UserController {
 	 * @return
 	 */
 	@GetMapping(path="/email-verification", produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}) 
+	// @CrossOrigin(origins="*")  // Habilita CORS para todos los dominios (menos seguro)
+	// @CrossOrigin(origins="http://localhost:8090") // Habilita CORS para un solo dominio
+	// @CrossOrigin(origins={"http://localhost:8090", "http://localhost:8091"}) // Habilita CORS para una lista determinada de dominios.
 	public OperationStatusModel verifyEmailToken(@RequestParam(value="token") String token) {
 		
 		OperationStatusModel rValue = new OperationStatusModel();

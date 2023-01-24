@@ -1,5 +1,7 @@
 package dev.ludwing.mobileappws.security;
 
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,6 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import dev.ludwing.mobileappws.service.UserService;
 
@@ -80,6 +85,7 @@ public class WebSecurity {
 		// de usuario al que le pertenece.
 		final AuthorizationFilter filterAuthorization = new AuthorizationFilter(authManager);
 		
+		// Las peticiones pre-flight de cors deben procesarse antes que cualquier cosa.
 		// CSRF se desactiva porque no se utiliza en stateless API's
 		// Luego se configura que todas las peticiones POST a /users no requieran autenticación Y requieren
 		// Todas las peticiones GET a "/" (raiz) de la aplicación deben permitirse porque estas son de status para AWS beanstalk.
@@ -87,7 +93,9 @@ public class WebSecurity {
 		// Todas las demás peticiones Sí deben ir autenticadas
 		// Se agregan los filtros de autenticación y autorización
 		// Se configura el framework para que la API sea stateless.
-		http.csrf().disable()
+		http
+			.cors().and()
+			.csrf().disable()
 			.authorizeHttpRequests().antMatchers(HttpMethod.POST, SecurityConstants.SIGN_UP_URL).permitAll()
 			.antMatchers(HttpMethod.GET, SecurityConstants.VERIFICATION_EMAIL_URL).permitAll()
 			.antMatchers(HttpMethod.POST, SecurityConstants.PASSWORD_RESET_REQUEST_URL).permitAll()
@@ -103,5 +111,35 @@ public class WebSecurity {
 		// http.headers().frameOptions().disable();
 		
 		return http.build();
+	}
+
+	/**
+	 * Este es un requerimiento para configurar CORS en la cadena de filtros de seguridad.
+	 * 
+	 * Se hace esto para que las peticiones pre-flight no se den por inválidas en la cadena de seguridad
+	 * ya que esas peticiones no tienen cookies o headers de autenticación.  Esto funciona en conjunto
+	 * con el procesamiento de las peticiones CORS (pre-flight) en la cadena de seguridad.
+	 * 
+	 * Ver: https://docs.spring.io/spring-security/site/docs/4.2.x/reference/html/cors.html
+	 * 
+	 * @return
+	 */
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() {
+		
+		final CorsConfiguration conf = new CorsConfiguration();
+		
+		// IMPORTANTE: cuando se usa setAllowCredentials(true) no se puede usar setAllowedOrigins(Arrays.asList("*"))
+		// Se tiene que especificar la lista de dominios válidos.
+		// conf.setAllowedOrigins(Arrays.asList("*"));
+		conf.setAllowedOrigins(Arrays.asList("http://localhost:8091")); //http://localhost:8091 es el dominio donde está el servicio auxiliar para verificar tokens de email. 
+		conf.setAllowedMethods(Arrays.asList("*"));
+		conf.setAllowCredentials(true);
+		conf.setAllowedHeaders(Arrays.asList("*"));
+		
+		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", conf);
+		
+		return source;
 	}
 }

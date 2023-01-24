@@ -22,15 +22,15 @@ public class AmazonEmailService {
 	
 	final String SUBJECT = "Verificar email";
 	
-	final String HTMLBODY = "<h1>Verifica tu email</h1><p> <a href='http://localhost:8080/verification-service/email-verification.html?token=$tokenValue'>aquí</a> </p>";
+	final String HTMLBODY = "<h1>Verifica tu email</h1><p> <a href='http://localhost:8091/verification-service/email-verification.html?token=$tokenValue'>aquí</a> </p>";
 	
-	final String TEXTBODY = "Verifica tu email aqui: http://localhost:8080/verification-service/email-verification.html?token=$tokenValue";
+	final String TEXTBODY = "Verifica tu email aqui: http://localhost:8091/verification-service/email-verification.html?token=$tokenValue";
 	
 	final String PASS_RESET_SUBJECT = "Solicitud de restrablecer contraseña";
 	
-	final String PASS_RESET_HTMLBODY = "<h1>Solicitud para regenerar su contraseña</h1> <p> Hola $firstName, puedes regenerar tu contraseña aqui: <a href='http://localhost:8080/verification-service/password-reset.html?token=$tokenValue'>Aquí</a> </p> <p>Gracias!</p>";
+	final String PASS_RESET_HTMLBODY = "<h1>Solicitud para regenerar su contraseña</h1> <p> Hola $firstName, puedes regenerar tu contraseña aqui: <a href='http://localhost:8091/verification-service/password-reset.html?token=$tokenValue'>Aquí</a> </p> <p>Gracias!</p>";
 	
-	final String PASS_RESET_TEXTBODY = "Hola $firstName, puedes regenerar tu contraseña aqui http://localhost:8080/verification-service/password-reset.html?token=$tokenValue Gracias!";
+	final String PASS_RESET_TEXTBODY = "Hola $firstName, puedes regenerar tu contraseña aqui http://localhost:8091/verification-service/password-reset.html?token=$tokenValue Gracias!";
 	
 	public void verifyEmail(UserDto user) {
 		AmazonSimpleEmailService client = AmazonSimpleEmailServiceClientBuilder

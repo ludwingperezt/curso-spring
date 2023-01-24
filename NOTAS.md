@@ -62,3 +62,32 @@
 	  que tomcat se agrega como dependencia pero solo en runtime y no en compile time.
 	- Compilar el proyecto.
 	  
+7.  CORS: Hay varias formas de habilitar CORS. Se puede habilitar para un endpoint específico, para
+	un controller o para toda la aplicación.
+	
+	Si se desea habilitar CORS para un endpoint o un controlador específico se debe utilizar
+	la anotación @CrossOrigin(origins=...) sobre el método correspondiente al endpoint
+	que se va habilitar (en caso de un endpoint) o sobre la clase completa del controlador
+	(para habilitar CORS para todos los endpoints que le pertenecen).
+	
+	Para indicar qué dominios se habilitan para CORS, en el parámetro origins de la anotación
+	se puede indicar según se necesite.  A continuación algunos ejemeplos:
+	- @CrossOrigin(origins="*") -- Esto habilita CORS para todos los dominios. Es una configuración insegura.
+	- @CrossOrigin(origins="http://midominio.com") -- Esto habilita CORS para un dominio específico
+	- @CrossOrigin(origins={"http://localhost:8090", "http://localhost:8091"}) -- Esto habilita
+		CORS para varios dominios diferentes.
+		
+	También es posible configurar CORS para toda la aplicación usando una clase de configuración
+	que implemente la interfaz WebMvcConfigurer y que sobreescriba el método 
+	´´´public void addCorsMappings(CorsRegistry registry)´´´ En ese método se debe configurar
+	las rutas, los métodos y los origenes permitidos para CORS. (Ver la clase WebConfig en el
+	paquete dev.ludwing.mobileappws para referencia).
+	
+	Para las rutas que están protegidas por autenticación también es necesario configurar CORS
+	en la configuración de WebSecurity (ver clase WebSecurity del paquete dev.ludwing.mobileappws.security)
+	Esta configuración permite que se procesen en primer lugar las peticiones pre-flight de CORS
+	y que no se den por inválidas, ya que éstas no tienen cookies o headers de autenticación.
+	
+	Ver: https://docs.spring.io/spring-security/site/docs/4.2.x/reference/html/cors.html 
+	
+
