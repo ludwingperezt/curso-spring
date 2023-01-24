@@ -140,4 +140,22 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, L
 	 */
 	@Query("SELECT u.firstName, u.lastName FROM UserEntity u WHERE u.userId = :userId")
 	List<Object[]> findUserEntityFullNameById(@Param("userId") String userId);
+	
+	/**
+	 * Este es un ejemplo de una query que modifica un registro en la base de datos usando JPQL.
+	 * Debido a este mismo motivo, es necesario usar las anotaciones @Transactional para que se haga un
+	 * rollback al momento de fallar la actualización; también es necesario usar @Modifying para indicar
+	 * que la query está modificando un registro en la base de datos.  También se debe hacer esto en caso
+	 * de queries que eliminen registros.  En el caso de la anotación @Transactional, ésta usualmente se
+	 * coloca en las clases de servicio y en los controllers cuando se requiere un control transaccional,
+	 * pero en este caso se colocó aquí porque de momento este método no es utilizado en ningún servicio
+	 * o controller.
+	 * 
+	 * @param emailStatus
+	 * @param userId
+	 */
+	@Modifying
+	@Transactional
+	@Query("UPDATE UserEntity u SET u.emailVerificationStatus = :emailStatus WHERE u.userId = :userId")
+	void updateUserEntityEmailVerificationStatus(@Param("emailStatus") boolean emailStatus, @Param("userId") String userId);
 }

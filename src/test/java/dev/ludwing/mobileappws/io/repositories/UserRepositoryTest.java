@@ -214,5 +214,27 @@ class UserRepositoryTest {
 		assertNotNull(firstName);
 		assertNotNull(lastName);
 	}
+	
+	/**
+	 * Comprobar el uso de una query JPQL de actualización de registro en la base de datos.
+	 */
+	@Test
+	void testUpdateUserEntityEmailVerificationStatus() {
+		
+		String userId = "test_user_ID";
+		
+		UserEntity originalUser = userRepository.findUserByUserId(userId);
+		
+		boolean newStatus = !originalUser.getEmailVerificationStatus();
+		
+		userRepository.updateUserEntityEmailVerificationStatus(newStatus, userId);
+		
+		UserEntity storedDetails = userRepository.findUserByUserId(userId);
+		
+		assertTrue(storedDetails.getEmailVerificationStatus() == newStatus);
+		
+		// Regresar al status original
+		userRepository.updateUserEmailVerificationStatus(!newStatus, userId);
+	}
 
 }
