@@ -114,4 +114,16 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, L
 	@Query(value="UPDATE users SET email_verification_status = :emailVerificationStatus WHERE user_id = :userId",
 			nativeQuery=true)
 	void updateUserEmailVerificationStatus(@Param("emailVerificationStatus") boolean emailVerificationStatus, @Param("userId") String userId);
+	
+	/**
+	 * Ejemplo de una consulta select con JPQL.
+	 * 
+	 * Cuando se hacen consultas con JPQL, en lugar de usar nombres de tablas y campos como están en la base de datos
+	 * se utilizan los nombres de las clases y atributos definidos en las entidades de persistencia.
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	@Query("SELECT user FROM UserEntity user WHERE user.userId = :userId")
+	UserEntity findUserEntityByUserId(@Param("userId") String userId);
 }

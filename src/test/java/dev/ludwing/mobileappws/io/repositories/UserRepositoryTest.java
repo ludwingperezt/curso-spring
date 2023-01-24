@@ -178,5 +178,17 @@ class UserRepositoryTest {
 		// Regresar al status original
 		userRepository.updateUserEmailVerificationStatus(!newStatus, userId);
 	}
+	
+	/**
+	 * Comprobar una consulta que utiliza JPQL
+	 */
+	@Test
+	final void testFindUserEntityByUserId() {
+		String userId = "test_user_ID";
+		UserEntity user = userRepository.findUserEntityByUserId(userId);
+		
+		assertNotNull(user);
+		assertTrue(user.getUserId().equals(userId));
+	}
 
 }

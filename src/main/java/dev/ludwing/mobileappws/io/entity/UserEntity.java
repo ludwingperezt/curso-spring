@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 /**
  * Esta clase define la tabla que se usará en la base de datos y sus campos.
@@ -18,7 +19,8 @@ import javax.persistence.OneToMany;
  * @author ludwingp
  *
  */
-@Entity(name = "users")
+@Entity
+@Table(name="users")
 public class UserEntity implements Serializable {
 
 	private static final long serialVersionUID = -8769262141680012810L;
