@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import dev.ludwing.mobileappws.io.entity.UserEntity;
@@ -67,4 +68,14 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, L
 	@Query(value="SELECT * FROM users u where u.first_name = ?1",
 			nativeQuery=true)
 	List<UserEntity> findUserByFirstName(String firstName);
+	
+	
+	// En este ejemplo se muestra como usar parámetros por nombre en una consulta SQL nativa.
+	// En este caso solo hace falta especificar en la consulta el nombre del parámetro antecedido
+	// de dos puntos (:).  Ese nombre debe coincidir con el nombre del parámetro especificado en
+	// la anotación @Param.  El nombre del parámetro como tal en la firma del método puede ser 
+	// cualquier otro, como en este ejemplo (aunque también puede ser el mismo).
+	@Query(value="SELECT * FROM users u where u.last_name = :lastNameParam",
+			nativeQuery=true)
+	List<UserEntity> findUsersByLastName(@Param("lastNameParam") String lastName);
 }

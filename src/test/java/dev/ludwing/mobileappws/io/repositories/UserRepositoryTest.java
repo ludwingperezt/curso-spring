@@ -100,5 +100,19 @@ class UserRepositoryTest {
 		assertNotNull(users);
 		assertTrue(users.size() == 2);
 	}
+	
+	/**
+	 * Este test comprueba el ejemplo de una consulta SQL nativa con parámetros por nombre.
+	 * 
+	 * En este momento funciona porque en la base de datos MySQL que usa la aplicación hay 
+	 * dos registros con el apellido "Garcia".
+	 */
+	@Test
+	void testFindUsersByLastName() {
+		String lastName = "Garcia";
+		List<UserEntity> users = userRepository.findUsersByLastName(lastName);
+		assertNotNull(users);
+		assertTrue(users.size() == 2);
+	}
 
 }
