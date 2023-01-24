@@ -1,5 +1,8 @@
 package dev.ludwing.mobileappws.io.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
@@ -41,4 +44,17 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, L
 	
 	// Busca al usuario que tenga el mismo token de verificación de email
 	UserEntity findUserByEmailVerificationToken(String token);
+	
+	// Es MUY IMPORTANTE especificar los valores de value y nativeQuery=true, de lo contrario
+	// se tomarían como una consulta Java Persistence Query
+	// value debe ser una consulta SQL normal
+	// nativeQuery siempre debe ser true
+	// Debido a que se está usando paginación, es necesario especificar también el parámetro
+	// countQuery, el cual es la misma consulta que value pero en este caso se retorna el conteo
+	// de registros totales que devolvería la consulta (con count(*)).  Esto es para que se
+	// pueda hacer correctamente la paginación.  Esto no se hace si no se usa Page o Pageable
+	@Query(value="SELECT * FROM users u where u.email_verification_status = true",
+			countQuery="SELECT COUNT(*) FROM users u where u.email_verification_status = true",
+			nativeQuery=true)
+	Page<UserEntity> findAllUsersWithConfirmedEmailAddress(Pageable pageableRequest);
 }
