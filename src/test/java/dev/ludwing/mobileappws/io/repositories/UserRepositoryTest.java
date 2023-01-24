@@ -34,10 +34,12 @@ class UserRepositoryTest {
 	
 	@Autowired
 	UserRepository userRepository;
-
-	@BeforeEach
-	void setUp() throws Exception {
-		
+	
+	// Esta variable sirve para controlar si los registros dummy ya fueron creados en la DB
+	// para evitar hacerlo más de una vez.
+	static boolean recordsCreated = false;
+	
+	private void createRecords() {
 		// En caso de que se use la base de datos H2 (in memory), se puede crear una entidad para que
 		// la consulta se ejecute correctamente.
 
@@ -64,7 +66,13 @@ class UserRepositoryTest {
 	    userEntity.setAddresses(addresses);
 	    
 	    // userRepository.save(userEntity);
-		
+	    
+	    recordsCreated = true;
+	}
+
+	@BeforeEach
+	void setUp() throws Exception {
+		if (!recordsCreated) createRecords();		
 	}
 
 	@Test
@@ -77,6 +85,20 @@ class UserRepositoryTest {
 		List<UserEntity> userEntities = page.getContent();
 		assertNotNull(userEntities);
 		assertTrue(userEntities.size() >= 1);
+	}
+	
+	/**
+	 * Este test comprueba el ejemplo de una consulta SQL nativa con parámetros posicionales.
+	 * 
+	 * En este momento funciona porque en la base de datos MySQL que usa la aplicación hay 
+	 * dos registros con el primer nombre "Homero".
+	 */
+	@Test
+	void testFindUserByFirstName() {
+		String firstName = "Homero";
+		List<UserEntity> users = userRepository.findUserByFirstName(firstName);
+		assertNotNull(users);
+		assertTrue(users.size() == 2);
 	}
 
 }

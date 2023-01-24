@@ -1,5 +1,7 @@
 package dev.ludwing.mobileappws.io.repositories;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -57,4 +59,12 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, L
 			countQuery="SELECT COUNT(*) FROM users u where u.email_verification_status = true",
 			nativeQuery=true)
 	Page<UserEntity> findAllUsersWithConfirmedEmailAddress(Pageable pageableRequest);
+	
+	// Esta consulta es un ejemplo de cómo usar parámetros posicionales en una consulta SQL
+	// nativa.  Para usar el primer parámetro se usa ?1, para el segundo ?2, etc.
+	// La posición de los parámetros está determinada por el orden en que están definidos en la 
+	// firma del método, es decir, el primer parámetro corresponde a ?1, el segundo a ?2, etc.
+	@Query(value="SELECT * FROM users u where u.first_name = ?1",
+			nativeQuery=true)
+	List<UserEntity> findUserByFirstName(String firstName);
 }
