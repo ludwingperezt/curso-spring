@@ -114,5 +114,25 @@ class UserRepositoryTest {
 		assertNotNull(users);
 		assertTrue(users.size() == 2);
 	}
+	
+	/**
+	 * Este test comprueba el ejemplo de una consulta SQL nativa con el uso de LIKE.
+	 * 
+	 * El ejemplo busca todos los usuarios cuyo nombre o apellido contenga la silaba "za".
+	 * 
+	 * En este momento funciona porque en la base de datos MySQL que usa la aplicación hay 
+	 * tres registros que cumplen la condición.
+	 */
+	@Test
+	void testFindUsersByKeyword() {
+		String keyword = "za";
+		List<UserEntity> users = userRepository.findUsersByKeyword(keyword);
+		
+		assertNotNull(users);
+		assertTrue(users.size() == 3);
+		
+		UserEntity user = users.get(0);
+		assertTrue(user.getLastName().contains(keyword) || user.getFirstName().contains(keyword));
+	}
 
 }
