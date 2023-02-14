@@ -28,3 +28,6 @@ logging.level.org.hibernate.SQL=DEBUG
 logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
 # Esta configuración es opcional. Especifica si la salida en los logs debe formatearse para que sea más agradable de leer.
 spring.jpa.properties.hibernate.format_sql=true
+
+# Esto es para que el proyecto encienda con la documentación de swagger.
+spring.mvc.pathmatch.matching-strategy=ant_path_matcher

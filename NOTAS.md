@@ -90,4 +90,11 @@
 	
 	Ver: https://docs.spring.io/spring-security/site/docs/4.2.x/reference/html/cors.html 
 	
-
+8.  Documentación con swagger
+	Para que la documentación con swagger funcionara, fue necesario agregar el @Bean webEndpointServletHandlerMapping
+	en la clase MobileAppWsApplication
+	Las direcciones para acceder a la documentación de la API con swagger son:
+	
+	http://localhost:8080/mobile-app-ws/v2/api-docs
+	http://localhost:8080/mobile-app-ws/swagger-ui/
+	

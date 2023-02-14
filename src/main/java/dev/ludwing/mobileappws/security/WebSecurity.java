@@ -102,6 +102,8 @@ public class WebSecurity {
 			.antMatchers(HttpMethod.POST, SecurityConstants.PASSWORD_RESET_URL).permitAll()
 			.antMatchers(SecurityConstants.H2_CONSOLE).permitAll()
 			.antMatchers(HttpMethod.GET, "/").permitAll()
+			.antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**") // Aqui se configuran las rutas usadas por swagger para que sean accesibles sin necesidad de autenticación.
+	        .permitAll()
 			.anyRequest().authenticated()
 			.and().addFilter(filter).addFilter(filterAuthorization)
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

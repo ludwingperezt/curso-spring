@@ -123,6 +123,14 @@
     <scope>runtime</scope>
 </dependency>
 
+<!-- Esta librería se usa para usar generar la documentación de la API con swagger -->
+<dependency>
+    <groupId>io.springfox</groupId>
+    <artifactId>springfox-boot-starter</artifactId>
+    <version>3.0.0</version>
+</dependency>
+
+
 	</dependencies>
 
 	<build>
