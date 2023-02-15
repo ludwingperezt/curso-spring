@@ -41,6 +41,7 @@ import dev.ludwing.mobileappws.ui.model.response.RequestOperationStatus;
 import dev.ludwing.mobileappws.ui.model.response.UserRest;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 
 // La anotación @RestController identifica la clase como un controlador REST para que pueda
 // recibir peticiones HTTP.
@@ -71,6 +72,8 @@ public class UserController {
 	 * @param userid
 	 * @return
 	 */
+	@ApiOperation(value="The GET user details web service endpoint", 
+			notes="${userController.GetUser.ApiOperation.Notes}")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="authorization", value="${userController.authorizationHeader.description}", paramType="header")  // En este ejemplo la descripción del header que se ve en swagger-ui se define a través de una property en el archivo application.properties
 	})
@@ -95,6 +98,8 @@ public class UserController {
 	 * @param userDetails
 	 * @return
 	 */
+	@ApiOperation(value="The POST user web service endpoint (sign up)", 
+			notes="${userController.PostUser.ApiOperation.Notes}")
 	@PostMapping(consumes= {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}, 
 					produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
 	public UserRest createUser(@RequestBody UserDetailRequestModel userDetails) throws Exception {
@@ -118,6 +123,8 @@ public class UserController {
 		return returnValue;
 	}
 	
+	@ApiOperation(value="The update user details web service endpoint", 
+			notes="${userController.PutUser.ApiOperation.Notes}")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="authorization", value="${userController.authorizationHeader.description}", paramType="header")  // En este ejemplo la descripción del header que se ve en swagger-ui se define a través de una property en el archivo application.properties
 	})
@@ -149,6 +156,8 @@ public class UserController {
 	 * @param userid
 	 * @return
 	 */
+	@ApiOperation(value="The delete user web service endpoint", 
+			notes="${userController.DeleteUser.ApiOperation.Notes}")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="authorization", value="${userController.authorizationHeader.description}", paramType="header")  // En este ejemplo la descripción del header que se ve en swagger-ui se define a través de una property en el archivo application.properties
 	})
@@ -173,6 +182,8 @@ public class UserController {
 	 * @param limit: Es un query param que indica qué cantidad de registros por página se solicita. Por defecto son 25.
 	 * @return
 	 */
+	@ApiOperation(value="The list users web service endpoint", 
+			notes="${userController.ListUsers.ApiOperation.Notes}")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="authorization", value="${userController.authorizationHeader.description}", paramType="header")  // En este ejemplo la descripción del header que se ve en swagger-ui se define a través de una property en el archivo application.properties
 	})
@@ -209,6 +220,8 @@ public class UserController {
 	 * @param userid
 	 * @return
 	 */
+	@ApiOperation(value="The list user's addresses web service endpoint", 
+			notes="${userController.ListAddresses.ApiOperation.Notes}")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="authorization", value="${userController.authorizationHeader.description}", paramType="header")  // En este ejemplo la descripción del header que se ve en swagger-ui se define a través de una property en el archivo application.properties
 	})
@@ -255,6 +268,8 @@ public class UserController {
 	 * @param addressId
 	 * @return
 	 */
+	@ApiOperation(value="The Get user's address web service endpoint", 
+			notes="${userController.GetAddress.ApiOperation.Notes}")
 	@ApiImplicitParams({
 		@ApiImplicitParam(name="authorization", value="${userController.authorizationHeader.description}", paramType="header")  // En este ejemplo la descripción del header que se ve en swagger-ui se define a través de una property en el archivo application.properties
 	})
@@ -313,6 +328,8 @@ public class UserController {
 	 * @param token
 	 * @return
 	 */
+	@ApiOperation(value="The verify email token web service endpoint", 
+			notes="${userController.GetVerifyEmailToken.ApiOperation.Notes}")
 	@GetMapping(path="/email-verification", produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}) 
 	// @CrossOrigin(origins="*")  // Habilita CORS para todos los dominios (menos seguro)
 	// @CrossOrigin(origins="http://localhost:8090") // Habilita CORS para un solo dominio
@@ -340,6 +357,8 @@ public class UserController {
 	 * @param passwordReset
 	 * @return
 	 */
+	@ApiOperation(value="The reset password web service endpoint", 
+			notes="${userController.PostRequestResetPassword.ApiOperation.Notes}")
 	@PostMapping(path="/reset-password-request", //
 			consumes= {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}, 
 			produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
@@ -367,6 +386,8 @@ public class UserController {
 	 * @param passwordReset
 	 * @return
 	 */
+	@ApiOperation(value="The reset password confirm web service endpoint", 
+			notes="${userController.PostConfirmResetPassword.ApiOperation.Notes}")
 	@PostMapping(path="/password-reset",
 			consumes= {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}, 
 			produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})

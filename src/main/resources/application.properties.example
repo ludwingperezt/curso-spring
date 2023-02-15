@@ -35,3 +35,15 @@ spring.mvc.pathmatch.matching-strategy=ant_path_matcher
 # Esta es una property para definir la descripción del header de autenticación a usar
 # en todos los endpoints que usan autenticación para ser accedidos
 userController.authorizationHeader.description=Bearer JWT Token
+
+# Ejemplo de cómo colocar una descripción de un endpoint para la documentación con swagger.
+userController.GetUser.ApiOperation.Notes=This web service endpoint returns User Details. Use public userId in URL Path. For example: /users/asdf1234
+userController.PostUser.ApiOperation.Notes=This web service endpoint it's used to create a new user
+userController.PutUser.ApiOperation.Notes=This web service endpoint it's used to update user details. Use public userId in URL path, for example: /users/asdf1234 
+userController.DeleteUser.ApiOperation.Notes=This web service endpoint it's used to delete a user. Use public userId in URL path, for example: /users/asdf1234
+userController.ListUsers.ApiOperation.Notes=This web services endpoint it's used to list all users.
+userController.ListAddresses.ApiOperation.Notes=This web service endpoint lists the user's addresses
+userController.GetAddress.ApiOperation.Notes=This web service endpoint get a user's specific address. Use public userId and addressId in URL path, for example: /users/asdf1234/addresses/zxcv5423
+userController.GetVerifyEmailToken.ApiOperation.Notes=This web service endpoint verifies if an email token is valid. Use the token in the query params, for example: /users/email-verification?token=abcde1234
+userController.PostRequestResetPassword.ApiOperation.Notes=This web service endpoint makes a request to reset a password
+userController.PostConfirmResetPassword.ApiOperation.Notes=This web service endpoint confirms a reset password request
