@@ -24,6 +24,7 @@
 	  ´´´
 	  mvn install
 	  ´´´
+	  * Otras opciones son: "mvn clean install" o "mvn package"
 	- Correr la aplicación con apache tomcat
 	  ´´´
 	  mvn spring-boot:run
