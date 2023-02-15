@@ -31,6 +31,7 @@ public class AuthController {
 	})
 	@PostMapping("/users/login")
 	public void theFakeLogin(@RequestBody LoginRequestModel loginRequestModel) {
+		// Se lanza esta excepción para que el endpoint implementado por Spring Security NO SE SOBREESCRIBA.
 		throw new IllegalStateException("This method should not be called. This method is implemented by Spring Security");
 	}
 }
