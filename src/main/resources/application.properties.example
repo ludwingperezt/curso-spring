@@ -31,3 +31,7 @@ spring.jpa.properties.hibernate.format_sql=true
 
 # Esto es para que el proyecto encienda con la documentación de swagger.
 spring.mvc.pathmatch.matching-strategy=ant_path_matcher
+
+# Esta es una property para definir la descripción del header de autenticación a usar
+# en todos los endpoints que usan autenticación para ser accedidos
+userController.authorizationHeader.description=Bearer JWT Token

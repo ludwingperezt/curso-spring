@@ -39,6 +39,8 @@ import dev.ludwing.mobileappws.ui.model.response.OperationStatusModel;
 import dev.ludwing.mobileappws.ui.model.response.RequestOperationName;
 import dev.ludwing.mobileappws.ui.model.response.RequestOperationStatus;
 import dev.ludwing.mobileappws.ui.model.response.UserRest;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 
 // La anotación @RestController identifica la clase como un controlador REST para que pueda
 // recibir peticiones HTTP.
@@ -69,6 +71,9 @@ public class UserController {
 	 * @param userid
 	 * @return
 	 */
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="authorization", value="${userController.authorizationHeader.description}", paramType="header")  // En este ejemplo la descripción del header que se ve en swagger-ui se define a través de una property en el archivo application.properties
+	})
 	@GetMapping(path="/{userid}", produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})  // Mapea la función al método GET 
 	public UserRest getUser(@PathVariable String userid) {
 		
@@ -113,6 +118,9 @@ public class UserController {
 		return returnValue;
 	}
 	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="authorization", value="${userController.authorizationHeader.description}", paramType="header")  // En este ejemplo la descripción del header que se ve en swagger-ui se define a través de una property en el archivo application.properties
+	})
 	@PutMapping(path="/{userid}", 
 				consumes= {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}, 
 				produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
@@ -141,6 +149,9 @@ public class UserController {
 	 * @param userid
 	 * @return
 	 */
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="authorization", value="${userController.authorizationHeader.description}", paramType="header")  // En este ejemplo la descripción del header que se ve en swagger-ui se define a través de una property en el archivo application.properties
+	})
 	@DeleteMapping(path="/{userid}", produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
 	public OperationStatusModel deleteUser(@PathVariable String userid) {
 		
@@ -162,6 +173,9 @@ public class UserController {
 	 * @param limit: Es un query param que indica qué cantidad de registros por página se solicita. Por defecto son 25.
 	 * @return
 	 */
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="authorization", value="${userController.authorizationHeader.description}", paramType="header")  // En este ejemplo la descripción del header que se ve en swagger-ui se define a través de una property en el archivo application.properties
+	})
 	@GetMapping(produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
 	public List<UserRest> getUsers(@RequestParam(value="page", defaultValue="0") int page,
 									@RequestParam(value="limit", defaultValue="25") int limit) {
@@ -195,6 +209,9 @@ public class UserController {
 	 * @param userid
 	 * @return
 	 */
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="authorization", value="${userController.authorizationHeader.description}", paramType="header")  // En este ejemplo la descripción del header que se ve en swagger-ui se define a través de una property en el archivo application.properties
+	})
 	@GetMapping(path="/{userid}/addresses", produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}) 
 	public CollectionModel<AddressRest> getUserAddresses(@PathVariable String userid) {
 		
@@ -238,6 +255,9 @@ public class UserController {
 	 * @param addressId
 	 * @return
 	 */
+	@ApiImplicitParams({
+		@ApiImplicitParam(name="authorization", value="${userController.authorizationHeader.description}", paramType="header")  // En este ejemplo la descripción del header que se ve en swagger-ui se define a través de una property en el archivo application.properties
+	})
 	@GetMapping(path="/{userid}/addresses/{addressId}", produces={MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}) 
 	public EntityModel<AddressRest> getAddress(@PathVariable String userid, @PathVariable String addressId) {
 		AddressDto addressDto = addressService.getAddress(addressId);
