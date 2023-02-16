@@ -99,3 +99,6 @@
 	http://localhost:8080/mobile-app-ws/v2/api-docs
 	http://localhost:8080/mobile-app-ws/swagger-ui/
 	
+9.  Authentication y authorization
+	- Authentication: Es el usuario quien dice ser? Verifica usuario y contraseña
+	- Authorization: El usuario tiene permiso para realizar la operación que solicita.

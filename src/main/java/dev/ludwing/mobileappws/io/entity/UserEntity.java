@@ -1,15 +1,20 @@
 package dev.ludwing.mobileappws.io.entity;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.JoinColumn;
 
 /**
  * Esta clase define la tabla que se usará en la base de datos y sus campos.
@@ -64,6 +69,14 @@ public class UserEntity implements Serializable {
 	//  asociadas a ese usuario.
 	@OneToMany(mappedBy="userDetails", cascade=CascadeType.ALL)
 	private List<AddressEntity> addresses;
+	
+	// Aqui se define una relación Muchos a Muchos con una tabla de roles.
+	// Esta es la definición de la tabla intermedia entre User y Rol.
+	@ManyToMany(cascade= {CascadeType.PERSIST}, fetch=FetchType.EAGER)
+	@JoinTable(name="users_roles", 
+			joinColumns=@JoinColumn(name="users_id", referencedColumnName="id"), 
+			inverseJoinColumns=@JoinColumn(name="roles_id", referencedColumnName="id"))
+	private Collection<RoleEntity> roles;
 
 	public long getId() {
 		return id;
