@@ -1,12 +1,19 @@
 package dev.ludwing.mobileappws;
 
+import java.util.Arrays;
+import java.util.Collection;
+
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import dev.ludwing.mobileappws.io.entity.AuthorityEntity;
+import dev.ludwing.mobileappws.io.entity.RoleEntity;
 import dev.ludwing.mobileappws.io.repositories.AuthorityRepository;
+import dev.ludwing.mobileappws.io.repositories.RoleRepository;
 
  /**
   * Un @Component es un tipo especial de @Bean que permite que la clase
@@ -28,21 +35,35 @@ public class InitialUsersSetup {
 	
 	@Autowired
 	AuthorityRepository authorityRepository;
+	
+	@Autowired
+	RoleRepository roleRepository;
 
 	@EventListener
+	@Transactional
 	public void onApplicationEvent(ApplicationReadyEvent event) {
 		System.out.println("Disparado desde el evento de carga de la aplicación...");
 		
+		// Crear las Authorities
 		AuthorityEntity readAuthority = createAuthority("READ_AUTHORITY");
 		AuthorityEntity writeAuthority = createAuthority("WRITE_AUTHORITY");
 		AuthorityEntity deleteAuthority = createAuthority("DELETE_AUTHORITY");
+		
+		// Crear los roles
+		RoleEntity userRole = createRole("ROLE_USER", Arrays.asList(readAuthority, writeAuthority));
+		RoleEntity adminRole = createRole("ROLE_ADMIN", Arrays.asList(readAuthority, writeAuthority, deleteAuthority));
 	}
 	
 	/**
-	 * Función para crear las Authorities al inicio de la aplicación
+	 * Función para crear las Authorities al inicio de la aplicación.
+	 * 
+	 * La anotación @Transactional debe usarse para cada función que ejecuta queryies de modificación
+	 * en la base de datos.
+	 * 
 	 * @param name
 	 * @return
 	 */
+	@Transactional
 	private AuthorityEntity createAuthority(String name) {
 		
 		AuthorityEntity authority = authorityRepository.findByName(name);
@@ -53,5 +74,27 @@ public class InitialUsersSetup {
 		}
 		
 		return authority;
+	}
+	
+	/**
+	 * Crea un rol con sus authorities relacionadas.
+	 * 
+	 * La anotación @Transactional debe usarse para cada función que ejecuta queryies de modificación
+	 * en la base de datos.
+	 * 
+	 * @param name
+	 * @param authorities
+	 * @return
+	 */
+	@Transactional
+	private RoleEntity createRole(String name, Collection<AuthorityEntity> authorities) {
+		RoleEntity role = roleRepository.findByName(name);
+		
+		if (role == null) {
+			role = new RoleEntity(name);
+			role.setAuthorities(authorities);
+			roleRepository.save(role);
+		}
+		return role;
 	}
 }
