@@ -3,11 +3,15 @@ package dev.ludwing.mobileappws.io.entity;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -31,6 +35,14 @@ public class RoleEntity  implements Serializable {
 	
 	@ManyToMany(mappedBy="roles")
 	private Collection<UserEntity> users;
+	
+	// Definición de la tabla intermedia muchos-a-muchos entre roles y authorities
+	// (permisos de acciones en el sistema)
+	@ManyToMany(cascade= {CascadeType.PERSIST}, fetch=FetchType.EAGER)
+	@JoinTable(name="roles_authorities", 
+			joinColumns=@JoinColumn(name="roles_id", referencedColumnName="id"), 
+			inverseJoinColumns=@JoinColumn(name="authorities_id", referencedColumnName="id"))
+	private Collection<AuthorityEntity> authorities;
 
 	public long getId() {
 		return id;
@@ -54,6 +66,14 @@ public class RoleEntity  implements Serializable {
 
 	public void setUsers(Collection<UserEntity> users) {
 		this.users = users;
+	}
+
+	public Collection<AuthorityEntity> getAuthorities() {
+		return authorities;
+	}
+
+	public void setAuthorities(Collection<AuthorityEntity> authorities) {
+		this.authorities = authorities;
 	}
 	
 	
