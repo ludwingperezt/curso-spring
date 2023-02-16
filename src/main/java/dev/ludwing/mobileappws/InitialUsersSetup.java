@@ -8,12 +8,16 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import dev.ludwing.mobileappws.io.entity.AuthorityEntity;
 import dev.ludwing.mobileappws.io.entity.RoleEntity;
+import dev.ludwing.mobileappws.io.entity.UserEntity;
 import dev.ludwing.mobileappws.io.repositories.AuthorityRepository;
 import dev.ludwing.mobileappws.io.repositories.RoleRepository;
+import dev.ludwing.mobileappws.io.repositories.UserRepository;
+import dev.ludwing.mobileappws.shared.Utils;
 
  /**
   * Un @Component es un tipo especial de @Bean que permite que la clase
@@ -38,6 +42,15 @@ public class InitialUsersSetup {
 	
 	@Autowired
 	RoleRepository roleRepository;
+	
+	@Autowired
+	BCryptPasswordEncoder encoder;
+	
+	@Autowired
+	Utils utils;
+	
+	@Autowired
+	UserRepository userRepository;
 
 	@EventListener
 	@Transactional
@@ -52,6 +65,19 @@ public class InitialUsersSetup {
 		// Crear los roles
 		RoleEntity userRole = createRole("ROLE_USER", Arrays.asList(readAuthority, writeAuthority));
 		RoleEntity adminRole = createRole("ROLE_ADMIN", Arrays.asList(readAuthority, writeAuthority, deleteAuthority));
+		
+		// Si el rol admin ya existe, ya no es necesario crear al usuario admin.
+		if (adminRole == null) return;
+		
+		UserEntity adminUser = new UserEntity();
+		adminUser.setFirstName("admin");
+		adminUser.setLastName("admin");
+		adminUser.setEmail("admin@admin.admin");
+		adminUser.setUserId(utils.generateUserId(30));
+		adminUser.setEncryptedPassword(encoder.encode("123456789"));
+		adminUser.setRoles(Arrays.asList(adminRole));
+		
+		userRepository.save(adminUser);
 	}
 	
 	/**
@@ -97,4 +123,6 @@ public class InitialUsersSetup {
 		}
 		return role;
 	}
+
+
 }
