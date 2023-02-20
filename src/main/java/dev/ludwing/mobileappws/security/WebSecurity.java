@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -49,6 +50,17 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 }
 */
 
+/**
+ * La anotación @EnableGlobalMethodSecurity puede usarse en cualquier clase que tenga la anotación
+ * @Configuration en caso de que no haya una clase con la anotación @EnableWebSecurity
+ * 
+ * @EnableGlobalMethodSecurity habilita ciertas anotaciones de seguridad por ejemplo @Secured.
+ * 
+ * @author ludwingp
+ *
+ */
+
+@EnableGlobalMethodSecurity(securedEnabled=true)
 @EnableWebSecurity
 public class WebSecurity {
 	
@@ -120,7 +132,7 @@ public class WebSecurity {
 			.antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**") // Aqui se configuran las rutas usadas por swagger para que sean accesibles sin necesidad de autenticación.
 	        .permitAll()
 	        //.antMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
-	        .antMatchers(HttpMethod.DELETE, "/users/**").hasAuthority("DELETE_AUTHORITY")
+	        //.antMatchers(HttpMethod.DELETE, "/users/**").hasAuthority("DELETE_AUTHORITY")
 			.anyRequest().authenticated()
 			.and().addFilter(filter).addFilter(filterAuthorization)
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

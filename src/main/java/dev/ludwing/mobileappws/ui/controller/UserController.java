@@ -14,6 +14,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -154,8 +155,14 @@ public class UserController {
 	/**
 	 * Método de endpoint para eliminar un registro de usuario.
 	 * @param userid
+	 * 
+	 * En la anotación @Secured se puede especificar qué rol o authority es necesaria para
+	 * poder ejecutar la acción.  Usar siempre el nombre completo del rol o authority
+	 * (por lo regular los roles comienzan con el prefix "ROLE_")
+	 * 
 	 * @return
 	 */
+	@Secured("ROLE_ADMIN")
 	@ApiOperation(value="The delete user web service endpoint", 
 			notes="${userController.DeleteUser.ApiOperation.Notes}")
 	@ApiImplicitParams({
