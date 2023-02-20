@@ -15,6 +15,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import dev.ludwing.mobileappws.io.repositories.UserRepository;
 import dev.ludwing.mobileappws.service.UserService;
 
 /**
@@ -53,10 +54,12 @@ public class WebSecurity {
 	
 	private final UserService userDetailService;  // Aqu{i se puede usar UserService porque esa clase heredó de UserDetailsService
 	private final BCryptPasswordEncoder encoder;
+	private final UserRepository userRepository;
 	
-	public WebSecurity(UserService detailService, BCryptPasswordEncoder encoder) {
+	public WebSecurity(UserService detailService, BCryptPasswordEncoder encoder, UserRepository userRepository) {
 		this.userDetailService = detailService;
 		this.encoder = encoder;
+		this.userRepository = userRepository;
 	}
 	
 	@Bean
@@ -83,7 +86,9 @@ public class WebSecurity {
 		
 		// Creación del filtro de autorización, el cual parsea el token JWT y obtiene el nombre
 		// de usuario al que le pertenece.
-		final AuthorizationFilter filterAuthorization = new AuthorizationFilter(authManager);
+		// Para el manejo de roles y authorities se modificó el constructor de AuthorizationFilter
+		// para poder inyectar el userRepository
+		final AuthorizationFilter filterAuthorization = new AuthorizationFilter(authManager, userRepository);
 		
 		// Las peticiones pre-flight de cors deben procesarse antes que cualquier cosa.
 		// CSRF se desactiva porque no se utiliza en stateless API's

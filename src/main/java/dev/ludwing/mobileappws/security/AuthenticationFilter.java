@@ -78,7 +78,10 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 											FilterChain chain, 
 											Authentication auth) throws IOException, ServletException {
 		
-		String username = ((User) auth.getPrincipal()).getUsername();
+		// Debido a que se modificó la implementación del método loadUserByUsername en la clase UserServiceImpl
+		// que implementa la interfaz UserService y que a la vez es llamada cuando se hace un login,
+		// es necesario cambiar el cast de User a UserPrincipal
+		String username = ((UserPrincipal) auth.getPrincipal()).getUsername();
 		
 		// SNIPPET: Este snippet lo agregué porque la función signWith() de Jwts.builder está deprecada
 		// Fuente: https://github.com/oktadev/okta-java-jwt-example/blob/master/src/main/java/com/okta/createverifytokens/JWTDemo.java

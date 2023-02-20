@@ -1,7 +1,6 @@
 package dev.ludwing.mobileappws.service.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -10,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -23,6 +20,7 @@ import dev.ludwing.mobileappws.io.entity.PasswordResetTokenEntity;
 import dev.ludwing.mobileappws.io.entity.UserEntity;
 import dev.ludwing.mobileappws.io.repositories.PasswordResetTokenRepository;
 import dev.ludwing.mobileappws.io.repositories.UserRepository;
+import dev.ludwing.mobileappws.security.UserPrincipal;
 import dev.ludwing.mobileappws.service.UserService;
 import dev.ludwing.mobileappws.shared.AmazonEmailService;
 import dev.ludwing.mobileappws.shared.Utils;
@@ -126,8 +124,12 @@ public class UserServiceImpl implements UserService {
 		//return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), new ArrayList<>());
 		
 		// En este constructor de User se especifica si el usuario está validado o no.
-		return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), 
-						userEntity.getEmailVerificationStatus(), true, true, true, new ArrayList<>());
+		// return new User(userEntity.getEmail(), userEntity.getEncryptedPassword(), 
+		// 				userEntity.getEmailVerificationStatus(), true, true, true, new ArrayList<>());
+		
+		// Para cargar las Authorities y roles asignadas al usuario en el momento en que se hace el login
+		// se ha creado una clase especial para gestionar esos datos:
+		return new UserPrincipal(userEntity);
 	}
 	
 	/***

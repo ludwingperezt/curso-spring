@@ -16,15 +16,20 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import dev.ludwing.mobileappws.io.entity.UserEntity;
+import dev.ludwing.mobileappws.io.repositories.UserRepository;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 public class AuthorizationFilter extends BasicAuthenticationFilter {
 
-	public AuthorizationFilter(AuthenticationManager authenticationManager) {
+	private final UserRepository userRepository;
+	
+	public AuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
 		super(authenticationManager);
-		// TODO Auto-generated constructor stub
+		this.userRepository = userRepository;
+		
 	}
 	
 	@Override
@@ -88,7 +93,9 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 			
 			
 			if (user != null) {
-				return new UsernamePasswordAuthenticationToken(user,  null, new ArrayList<>());
+				UserEntity userEntity = this.userRepository.findUserByEmail(user);
+				UserPrincipal userPrincipal = new UserPrincipal(userEntity);
+				return new UsernamePasswordAuthenticationToken(user,  null, userPrincipal.getAuthorities());
 			}
 		}
 		return null;
