@@ -98,6 +98,10 @@ public class WebSecurity {
 		// Todas las demás peticiones Sí deben ir autenticadas
 		// Se agregan los filtros de autenticación y autorización
 		// Se configura el framework para que la API sea stateless.
+		// La línea .antMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN") lo que hace es validar que para cada solicitud
+		// 	hecha a con método DELETE a cualquier endpoint que esté bajo la raíz /users (incluyendo subdirectorios)
+		// 	entonces se requiera el rol de admin.  Para ello se usa la función hasRole("ADMIN") En este caso no es necesario
+		// 	poner "ROLE_ADMIN" porque Spring lo autocompleta de forma automática cuando se usa la función hasRole().
 		http
 			.cors().and()
 			.csrf().disable()
@@ -109,6 +113,7 @@ public class WebSecurity {
 			.antMatchers(HttpMethod.GET, "/").permitAll()
 			.antMatchers("/v2/api-docs", "/configuration/**", "/swagger*/**", "/webjars/**") // Aqui se configuran las rutas usadas por swagger para que sean accesibles sin necesidad de autenticación.
 	        .permitAll()
+	        .antMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
 			.anyRequest().authenticated()
 			.and().addFilter(filter).addFilter(filterAuthorization)
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
