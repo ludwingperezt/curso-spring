@@ -104,6 +104,10 @@ public class WebSecurity {
 		// 	poner "ROLE_ADMIN" porque Spring lo autocompleta de forma automática cuando se usa la función hasRole().
 		//  También es posible verificar por authority en lugar de rol. Para ello solo hace falta cambiar la función
 		//	.hasRole("ADMIN") por .hasAuthority("DELETE_AUTHORITY")
+		// 	También se puede pedir la verificación para múltiples authorities o múltiples roles con las funciones 
+		//	hasAnyAuthority() y hasAnyRole() especificando todos los roles o authorities que sean necesarios para realizar la operación:
+		//	.antMatchers(HttpMethod.DELETE, "/users/**").hasAnyAuthority("DELETE_AUTHORITY", "DELETE_ALL_AUTHORITY", "...", )
+		//	.antMatchers(HttpMethod.DELETE, "/users/**").hasAnyRole("ADMIN", "SUPERADMIN", "...", )
 		http
 			.cors().and()
 			.csrf().disable()
