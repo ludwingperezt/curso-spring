@@ -55,12 +55,15 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
  * @Configuration en caso de que no haya una clase con la anotación @EnableWebSecurity
  * 
  * @EnableGlobalMethodSecurity habilita ciertas anotaciones de seguridad por ejemplo @Secured.
+ * 		Para habilitar las anotaciones @Secure se debe usar el parámetro securedEnabled=true
+ * 		y para habilitar las anotaciones @PreAuthorize y @PostAuthorize se debe usar el 
+ * 		parámetro prePostEnabled=true
  * 
  * @author ludwingp
  *
  */
 
-@EnableGlobalMethodSecurity(securedEnabled=true)
+@EnableGlobalMethodSecurity(securedEnabled=true, prePostEnabled=true)
 @EnableWebSecurity
 public class WebSecurity {
 	

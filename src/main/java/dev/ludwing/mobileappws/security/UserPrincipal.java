@@ -21,11 +21,16 @@ public class UserPrincipal implements UserDetails {
 
 	private static final long serialVersionUID = 4085694078557675664L;
 	
+	// Aqui se agregó el userId para que esté disponible en caso de que se
+	// utilicen las security expressions.
+	private String userId;
+	
 	UserEntity userEntity;
 
 	public UserPrincipal(UserEntity userEntity) {
 		// TODO Auto-generated constructor stub
 		this.userEntity = userEntity;
+		this.userId = userEntity.getUserId();
 	}
 
 	/**
@@ -90,5 +95,15 @@ public class UserPrincipal implements UserDetails {
 	public boolean isEnabled() {
 		return this.userEntity.getEmailVerificationStatus();
 	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	
+	
 
 }

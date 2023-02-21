@@ -44,6 +44,12 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 			return;
 		}
 		
+		/**
+		 * Esta parte es muy importante: Cuando se retorna exitosamente un usuario autenticado
+		 * desde la función getAuthentication(), al momento de asignar el resultado al 
+		 * security context holder, en ese momento estamos habilitando que todo el objeto retornado
+		 * (UserPrincipal) esté disponible en las security expressions.
+		 */
 		UsernamePasswordAuthenticationToken auth = getAuthentication(req);
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		chain.doFilter(req, res);
@@ -94,8 +100,12 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 			
 			if (user != null) {
 				UserEntity userEntity = this.userRepository.findUserByEmail(user);
+				
+				if (userEntity == null) return null;
+
 				UserPrincipal userPrincipal = new UserPrincipal(userEntity);
-				return new UsernamePasswordAuthenticationToken(user,  null, userPrincipal.getAuthorities());
+				// Aqui se retorna el objeto de UserPrincipal para que esté disponible para las security expressions.
+				return new UsernamePasswordAuthenticationToken(userPrincipal,  null, userPrincipal.getAuthorities());
 			}
 		}
 		return null;

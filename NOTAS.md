@@ -99,6 +99,25 @@
 	http://localhost:8080/mobile-app-ws/v2/api-docs
 	http://localhost:8080/mobile-app-ws/swagger-ui/
 	
+	Las siguientes anotaciones están relacionadas con swagger:
+	@ApiOperation -- Se usa para describir un endpoint.
+	@ApiImplicitParams -- Se usa generalmente para definir parámetros enviados por headers.
+	
 9.  Authentication y authorization
 	- Authentication: Es el usuario quien dice ser? Verifica usuario y contraseña
 	- Authorization: El usuario tiene permiso para realizar la operación que solicita.
+	
+	* Role: Son grupos o categorías de usuarios cada uno con ciertos privilegios o permisos.
+	* Authority: Son permisos granulares asignados a un usuario o un rol. También se les conoce como
+		"privileges".
+	
+	Las siguientes anotaciones están relacionadas con la gestión de roles y permisos (a estas anotaciones
+	se les conoce como "security expressions", especialmente las que se pueden hacer con las anotaciones
+	PreAuthorized o PostAuthorized):
+	@Secured -- Indica que una clase de controlador o un método en un controlador están 
+		protegidos y solo son accesibles para un rol o un authority en específico.
+	@EnableGlobalMethodSecurity -- Habilita los métodos de seguridad a nivel global.
+	@PreAuthorize -- Define si un método puede ser accedido o no. Esta anotación soporta
+		expresiones de seguridad de métodos (method security expressions).
+	@PostAuthorize -- El método se ejecuta y la validación de seguridad se efectura 
+		después de que se haya ejecutado el método invocado.
