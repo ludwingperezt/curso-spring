@@ -17,6 +17,7 @@ import dev.ludwing.mobileappws.io.entity.UserEntity;
 import dev.ludwing.mobileappws.io.repositories.AuthorityRepository;
 import dev.ludwing.mobileappws.io.repositories.RoleRepository;
 import dev.ludwing.mobileappws.io.repositories.UserRepository;
+import dev.ludwing.mobileappws.shared.Roles;
 import dev.ludwing.mobileappws.shared.Utils;
 
  /**
@@ -63,8 +64,8 @@ public class InitialUsersSetup {
 		AuthorityEntity deleteAuthority = createAuthority("DELETE_AUTHORITY");
 		
 		// Crear los roles
-		RoleEntity userRole = createRole("ROLE_USER", Arrays.asList(readAuthority, writeAuthority));
-		RoleEntity adminRole = createRole("ROLE_ADMIN", Arrays.asList(readAuthority, writeAuthority, deleteAuthority));
+		RoleEntity userRole = createRole(Roles.ROLE_USER.name(), Arrays.asList(readAuthority, writeAuthority));
+		RoleEntity adminRole = createRole(Roles.ROLE_ADMIN.name(), Arrays.asList(readAuthority, writeAuthority, deleteAuthority));
 		
 		UserEntity adminUser = userRepository.findUserByEmail("admin@admin.admin");
 		

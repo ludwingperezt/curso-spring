@@ -3,6 +3,7 @@ package dev.ludwing.mobileappws.ui.controller;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.ludwing.mobileappws.exceptions.UserServiceException;
 import dev.ludwing.mobileappws.service.AddressService;
 import dev.ludwing.mobileappws.service.UserService;
+import dev.ludwing.mobileappws.shared.Roles;
 import dev.ludwing.mobileappws.shared.dto.AddressDto;
 import dev.ludwing.mobileappws.shared.dto.UserDto;
 import dev.ludwing.mobileappws.ui.model.request.PasswordResetModel;
@@ -114,6 +116,10 @@ public class UserController {
 		// de ahora se utiliza ModelMapper
 		ModelMapper modelMapper = new ModelMapper();
 		UserDto userDto = modelMapper.map(userDetails, UserDto.class);
+		
+		// Asignar el rol de usuario al usuario que se va a crear
+		// Se usa un HashSet para que no hayan valores repetidos
+		userDto.setRoles(new HashSet<>(Arrays.asList(Roles.ROLE_USER.name()))); 
 		
 		UserDto createdUser = userService.createUser(userDto);
 

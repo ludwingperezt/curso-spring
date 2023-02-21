@@ -1,6 +1,8 @@
 package dev.ludwing.mobileappws.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -17,8 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import dev.ludwing.mobileappws.exceptions.UserServiceException;
 import dev.ludwing.mobileappws.io.entity.PasswordResetTokenEntity;
+import dev.ludwing.mobileappws.io.entity.RoleEntity;
 import dev.ludwing.mobileappws.io.entity.UserEntity;
 import dev.ludwing.mobileappws.io.repositories.PasswordResetTokenRepository;
+import dev.ludwing.mobileappws.io.repositories.RoleRepository;
 import dev.ludwing.mobileappws.io.repositories.UserRepository;
 import dev.ludwing.mobileappws.security.UserPrincipal;
 import dev.ludwing.mobileappws.service.UserService;
@@ -57,6 +61,9 @@ public class UserServiceImpl implements UserService {
 	// Se anota la clase AmazonEmailService como un servicio inyectado para facilitar el testing.
 	@Autowired
 	AmazonEmailService amazonSES;
+	
+	@Autowired
+	RoleRepository roleRepository;
 
 	/**
 	 * Función de servicio que ejecuta la inserción de un registro en la base de datos.
@@ -94,6 +101,18 @@ public class UserServiceImpl implements UserService {
 		userEntity.setUserId(publicUserId); // Generar el ID único alfanumérico del usuario.
 		userEntity.setEmailVerificationToken(utils.generateEmailVerificationToken(publicUserId));
 		userEntity.setEmailVerificationStatus(false);
+		
+		// Asignar los roles:
+		Collection<RoleEntity> rolesEntities = new HashSet<>();
+		for (String roleName: user.getRoles()) {
+			RoleEntity roleObj = roleRepository.findByName(roleName);
+			
+			if (roleObj != null) {
+				rolesEntities.add(roleObj);
+			}
+		}
+		
+		userEntity.setRoles(rolesEntities);
 		
 		// Iterar sobre la lista de direcciones del usuario y generar el ID para cada una de ellas.
 		

@@ -2,6 +2,7 @@ package dev.ludwing.mobileappws.security;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -38,8 +39,10 @@ public class UserPrincipal implements UserDetails {
 	 */
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		List<GrantedAuthority> authorities = new ArrayList<>();
-		List<AuthorityEntity> authorityEntities = new ArrayList<>();
+		
+		// Se usan HashSets para no tener valores repetidos
+		Collection<GrantedAuthority> authorities = new HashSet<>();
+		Collection<AuthorityEntity> authorityEntities = new HashSet<>();
 		
 		// Obener roles de usuario
 		Collection<RoleEntity> roles = userEntity.getRoles();
